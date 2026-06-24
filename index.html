@@ -62,24 +62,16 @@
   <header class="sticky top-0 z-40 bg-brand-navy/90 backdrop-blur-md border-b border-slate-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
-      <!-- Brand Logo (Symmetrical cerebral circuitos unmodified, respecting constraints) -->
+      <!-- Brand Logo con imagen personalizada (logo.png) -->
       <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
-        <div class="h-10 w-10 bg-white rounded-full flex items-center justify-center p-1 border border-slate-200 shadow">
-          <svg viewBox="0 0 500 500" class="h-8 w-8" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M230 110C170 110 120 150 120 210C120 240 135 265 150 280C140 295 130 315 130 340C130 390 170 420 220 420C230 420 235 418 240 415" stroke="#1e293b" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M230 180C190 180 170 200 170 230C170 260 190 280 220 280" stroke="#0f172a" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M230 350C180 350 180 310 200 290" stroke="#1e293b" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M270 110C330 110 380 150 380 210C380 240 365 265 350 280C360 295 370 315 370 340C370 390 330 420 280 420C270 420 265 418 260 415" stroke="#1e293b" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M270 180C310 180 330 200 330 230C330 260 310 280 280 280" stroke="#0f172a" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M270 350C320 350 320 310 300 290" stroke="#1e293b" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="250" y1="90" x2="250" y2="430" stroke="#0f172a" stroke-width="24" stroke-linecap="round" />
-            <circle cx="230" cy="110" r="14" fill="#3b82f6" />
-            <circle cx="270" cy="110" r="14" fill="#3b82f6" />
-            <circle cx="150" cy="280" r="14" fill="#0f172a" />
-            <circle cx="350" cy="280" r="14" fill="#0f172a" />
-            <circle cx="200" cy="290" r="14" fill="#3b82f6" />
-            <circle cx="300" cy="290" r="14" fill="#3b82f6" />
-          </svg>
+        <div class="h-10 w-10 bg-white rounded-full flex items-center justify-center p-1 border border-slate-200 shadow overflow-hidden">
+          <!-- Carga tu imagen logo.png. Si falla o no se ha subido aún, muestra un placeholder de respaldo -->
+          <img 
+            src="logo.png" 
+            alt="MINDMERGE Logo" 
+            class="h-full w-full object-contain"
+            onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=80&auto=format&fit=crop';"
+          />
         </div>
         <div>
           <span class="text-lg font-black tracking-wider text-white">MINDMERGE</span>
@@ -637,16 +629,14 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
       <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-900">
         <div class="flex items-center gap-3">
+          <!-- Footer Logo -->
           <div class="h-8 w-8 bg-white rounded-full flex items-center justify-center p-1 border border-slate-200">
-            <svg viewBox="0 0 500 500" class="h-6 w-6" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M230 110C170 110 120 150 120 210C120 240 135 265 150 280C140 295 130 315 130 340C130 390 170 420 220 420C230 420 235 418 240 415" stroke="#1e293b" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M230 180C190 180 170 200 170 230C170 260 190 280 220 280" stroke="#0f172a" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M230 350C180 350 180 310 200 290" stroke="#1e293b" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M270 110C330 110 380 150 380 210C380 240 365 265 350 280C360 295 370 315 370 340C370 390 330 420 280 420C270 420 265 418 260 415" stroke="#1e293b" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M270 180C310 180 330 200 330 230C330 260 310 280 280 280" stroke="#0f172a" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M270 350C320 350 320 310 300 290" stroke="#1e293b" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/>
-              <line x1="250" y1="90" x2="250" y2="430" stroke="#0f172a" stroke-width="24" stroke-linecap="round" />
-            </svg>
+            <img 
+              src="logo.png" 
+              alt="MINDMERGE Logo" 
+              class="h-full w-full object-contain"
+              onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=80&auto=format&fit=crop';"
+            />
           </div>
           <span class="text-sm font-bold tracking-wider text-white">MINDMERGE</span>
         </div>
@@ -898,7 +888,7 @@
         title: 'Consumo · Operación de Vending Machines',
         problem: 'Pérdidas operativas por máquinas fuera de servicio y elevados costes por desplazamientos técnicos erróneos.',
         solution: 'Aplicación móvil de soporte con IA integrada para diagnóstico de fallas físicas en tiempo real y asistencia guiada paso a paso.',
-        metric: 'Reducción de visitas técnicas y drástica disminución del tiempo de inactividad.',
+        metric: 'Reducción de visitas técnicas y drástica disminución del tiempo de inactividad operativa.',
         badge: 'Soporte Inteligente',
         ref: 'Consumo | Operación de Vending Machines',
         svg: `
