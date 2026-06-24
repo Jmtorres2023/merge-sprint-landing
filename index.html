@@ -6,20 +6,24 @@
   <title>MINDMERGE · MERGE Sprint®</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Tailwind Configuration matching our Brand Identity -->
+  <!-- Tailwind Configuration matching Accenture's high-contrast organic style -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
             brand: {
-              navy: '#020813',
-              dark: '#040c1a',
+              navy: '#010309',
+              dark: '#030815',
               orange: '#ff5500',
               orangeHover: '#e04b00',
-              card: '#050e1f',
-              border: '#1e293b'
+              purple: '#6d28d9',
+              glow: '#ff7700',
+              card: 'rgba(5, 12, 30, 0.65)'
             }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
           }
         }
       }
@@ -28,17 +32,82 @@
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
-    /* Custom Scrollbar and Keyframe Animations for Mobile/iPad Touch Smoothness */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap');
+
+    /* Custom kinetic animations to break the "square box" feel */
     ::-webkit-scrollbar {
       width: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #020813;
+      background: #010309;
     }
     ::-webkit-scrollbar-thumb {
       background: #ff5500;
-      border-radius: 3px;
+      border-radius: 4px;
     }
+
+    /* Rotating background slides with Ken Burns zoom effect */
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1.5s ease-in-out;
+      transform: scale(1.05);
+    }
+    .hero-slide.active {
+      opacity: 0.35;
+      animation: kenBurns 12s ease-out forwards;
+    }
+
+    @keyframes kenBurns {
+      to {
+        transform: scale(1.15);
+      }
+    }
+
+    /* Diagonal clipped background separators */
+    .clip-diagonal-1 {
+      clip-path: polygon(0 0, 100% 4%, 100% 100%, 0 96%);
+    }
+    .clip-diagonal-2 {
+      clip-path: polygon(0 4%, 100% 0, 100% 96%, 0 100%);
+    }
+
+    /* Floating kinetic bubbles */
+    .floating-glow {
+      animation: floatGlow 18s ease-in-out infinite alternate;
+    }
+    @keyframes floatGlow {
+      0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        filter: blur(100px);
+      }
+      50% {
+        transform: translate(60px, -40px) scale(1.2) rotate(180deg);
+        filter: blur(140px);
+      }
+      100% {
+        transform: translate(-30px, 80px) scale(0.9) rotate(360deg);
+        filter: blur(100px);
+      }
+    }
+
+    /* Interactive neon outline cards */
+    .kinetic-card {
+      position: relative;
+      background: rgba(5, 12, 30, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 85, 0, 0.08);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .kinetic-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      border-color: rgba(255, 85, 0, 0.5);
+      box-shadow: 0 20px 40px -15px rgba(255, 85, 0, 0.15);
+    }
+
+    /* SVG circuit dash anim */
     @keyframes dash {
       to {
         stroke-dashoffset: -40;
@@ -46,26 +115,34 @@
     }
     .animate-dash {
       stroke-dasharray: 8 4;
-      animation: dash 5s linear infinite;
+      animation: dash 6s linear infinite;
+    }
+
+    /* Glow effect text */
+    .glow-accent {
+      text-shadow: 0 0 25px rgba(255, 85, 0, 0.4);
     }
   </style>
 </head>
-<body class="bg-brand-navy text-slate-200 font-sans selection:bg-brand-orange selection:text-white overflow-x-hidden min-h-screen">
+<body class="bg-brand-navy text-slate-100 font-sans selection:bg-brand-orange selection:text-white overflow-x-hidden min-h-screen relative">
+
+  <!-- BACKGROUND KINETIC FLOATING BLCOBS -->
+  <div class="absolute top-[20%] left-[-10%] w-[450px] h-[450px] bg-brand-orange/5 rounded-full floating-glow pointer-events-none z-0"></div>
+  <div class="absolute top-[60%] right-[-10%] w-[550px] h-[550px] bg-brand-purple/5 rounded-full floating-glow pointer-events-none z-0" style="animation-delay: -5s;"></div>
 
   <!-- NOTIFICACIÓN FLOTANTE -->
-  <div id="notification" class="fixed bottom-6 right-6 z-50 bg-[#071124] border-l-4 border-brand-orange text-slate-200 px-5 py-4 rounded shadow-2xl flex items-center gap-3 hidden transition-all duration-350 max-w-sm">
-    <i data-lucide="flame" class="text-brand-orange w-5 h-5 flex-shrink-0"></i>
+  <div id="notification" class="fixed bottom-6 right-6 z-50 bg-brand-dark/95 backdrop-blur border-l-4 border-brand-orange text-slate-200 px-5 py-4 rounded shadow-2xl flex items-center gap-3 hidden transition-all duration-300 max-w-sm">
+    <i data-lucide="flame" class="text-brand-orange w-5 h-5 flex-shrink-0 animate-bounce"></i>
     <p id="notification-text" class="text-xs font-semibold"></p>
   </div>
 
   <!-- HEADER -->
-  <header class="sticky top-0 z-40 bg-brand-navy/90 backdrop-blur-md border-b border-slate-900">
+  <header class="sticky top-0 z-40 bg-brand-navy/90 backdrop-blur-md border-b border-slate-900/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
-      <!-- Brand Logo con imagen personalizada (logo.png) -->
-      <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
-        <div class="h-10 w-10 bg-white rounded-full flex items-center justify-center p-1 border border-slate-200 shadow overflow-hidden">
-          <!-- Carga tu imagen logo.png. Si falla o no se ha subido aún, muestra un placeholder de respaldo -->
+      <!-- Brand Logo con imagen de repositorio (logo.PNG - Sin Modificar) -->
+      <div class="flex items-center gap-3 cursor-pointer group" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+        <div class="h-11 w-11 bg-white rounded-full flex items-center justify-center p-1 border border-slate-800 shadow-xl overflow-hidden transition-transform duration-500 group-hover:rotate-[360deg]">
           <img 
             src="logo.PNG" 
             alt="MINDMERGE Logo" 
@@ -74,187 +151,310 @@
           />
         </div>
         <div>
-          <span class="text-lg font-black tracking-wider text-white">MINDMERGE</span>
-          <p class="text-[9px] text-[#ff5500] font-mono tracking-widest uppercase">Estrategia & IA aplicada</p>
+          <span class="text-lg font-black tracking-wider text-white transition-colors group-hover:text-brand-orange">MINDMERGE</span>
+          <p class="text-[9px] text-brand-orange font-mono tracking-widest uppercase">Estrategia & IA aplicada</p>
         </div>
       </div>
 
-      <!-- Desktop Links -->
+      <!-- Navigation Links -->
       <nav class="hidden md:flex items-center gap-8">
-        <button onclick="scrollToId('calculadora')" class="text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">Costo de no Decidir</button>
-        <button onclick="scrollToId('metodologia')" class="text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">Metodología 5 Fases</button>
-        <button onclick="scrollToId('casos')" class="text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">Casos por Industria</button>
-        <button onclick="scrollToId('porque-funciona')" class="text-xs font-bold uppercase tracking-wider text-slate-400 hover:text-white transition-colors">Por Qué Funciona</button>
+        <button onclick="scrollToId('comparador')" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors relative py-1 group">
+          Estrategia Espejo
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+        </button>
+        <button onclick="scrollToId('calculadora')" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors relative py-1 group">
+          Costo de no Decidir
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+        </button>
+        <button onclick="scrollToId('metodologia')" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors relative py-1 group">
+          Método 5 Fases
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+        </button>
+        <button onclick="scrollToId('casos')" class="text-xs font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors relative py-1 group">
+          Casos de Uso
+          <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+        </button>
       </nav>
 
       <!-- Desktop CTA -->
       <div class="hidden md:flex items-center gap-4">
         <button 
           onclick="scrollToId('contacto')"
-          class="bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold px-5 py-2.5 rounded text-xs tracking-wider uppercase transition-all shadow-lg shadow-brand-orange/25"
+          class="bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold px-6 py-3 rounded text-xs tracking-widest uppercase transition-all shadow-lg shadow-brand-orange/25 relative overflow-hidden group active:scale-95"
         >
-          Agenda 30 Minutos
+          <span class="relative z-10">Agenda 30 Minutos</span>
+          <span class="absolute inset-0 bg-white/10 translate-y-full transition-transform duration-300 group-hover:translate-y-0"></span>
         </button>
       </div>
 
       <!-- Mobile Button -->
-      <button class="md:hidden text-slate-300 hover:text-white p-2" onclick="toggleMobileMenu()">
+      <button class="md:hidden text-slate-300 hover:text-white p-2 animate-pulse" onclick="toggleMobileMenu()">
         <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
       </button>
     </div>
 
-    <!-- Mobile Dropdown -->
-    <div id="mobile-menu" class="hidden md:hidden bg-brand-card border-b border-slate-900 px-4 py-6 flex flex-col gap-4">
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden bg-brand-dark/95 backdrop-blur border-b border-slate-900 px-4 py-6 flex flex-col gap-4">
+      <button onclick="scrollToId('comparador')" class="text-left text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white py-2">Estrategia Espejo</button>
       <button onclick="scrollToId('calculadora')" class="text-left text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white py-2">Costo de no Decidir</button>
       <button onclick="scrollToId('metodologia')" class="text-left text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white py-2">Metodología 5 Fases</button>
-      <button onclick="scrollToId('casos')" class="text-left text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white py-2">Casos por Industria</button>
-      <button onclick="scrollToId('porque-funciona')" class="text-left text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white py-2">Por Qué Funciona</button>
+      <button onclick="scrollToId('casos')" class="text-left text-xs font-bold uppercase tracking-wider text-slate-300 hover:text-white py-2">Casos de Uso</button>
       <hr class="border-slate-800 my-2" />
       <button 
         onclick="scrollToId('contacto')"
-        class="bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold py-3 px-4 rounded text-xs text-center uppercase tracking-wider transition-all"
+        class="bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold py-3.5 px-4 rounded text-xs text-center uppercase tracking-wider transition-all"
       >
         Agenda 30 Minutos
       </button>
     </div>
   </header>
 
-  <!-- HERO SECTION -->
-  <section class="relative pt-16 pb-28 md:pt-24 md:pb-36 overflow-hidden">
-    <div class="absolute top-1/4 left-1/3 w-[600px] h-[600px] bg-indigo-900/10 rounded-full blur-[130px] pointer-events-none"></div>
-    <div class="absolute top-10 right-10 w-[400px] h-[400px] bg-brand-orange/5 rounded-full blur-[120px] pointer-events-none"></div>
+  <!-- DYNAMIC BACKGROUND SLIDESHOW HERO -->
+  <section class="relative pt-24 pb-36 md:pt-36 md:pb-48 overflow-hidden min-h-[90vh] flex items-center justify-center">
+    
+    <!-- Rotating Images (Ken Burns Slideshow) -->
+    <div class="absolute inset-0 z-0 overflow-hidden bg-brand-navy">
+      <div class="hero-slide active" style="background: linear-gradient(to bottom, rgba(1, 3, 9, 0.95), rgba(1, 3, 9, 0.8)), url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1600&auto=format&fit=crop') center/cover no-repeat;"></div>
+      <div class="hero-slide" style="background: linear-gradient(to bottom, rgba(1, 3, 9, 0.95), rgba(1, 3, 9, 0.8)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600&auto=format&fit=crop') center/cover no-repeat;"></div>
+      <div class="hero-slide" style="background: linear-gradient(to bottom, rgba(1, 3, 9, 0.95), rgba(1, 3, 9, 0.8)), url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1600&auto=format&fit=crop') center/cover no-repeat;"></div>
+      <div class="hero-slide" style="background: linear-gradient(to bottom, rgba(1, 3, 9, 0.95), rgba(1, 3, 9, 0.8)), url('https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1600&auto=format&fit=crop') center/cover no-repeat;"></div>
+    </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+    <!-- Hero Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-10">
+      
+      <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-brand-card/90 border border-brand-orange/20 text-xs text-brand-orange font-mono tracking-widest uppercase shadow-xl backdrop-blur">
+        <i data-lucide="sparkles" class="w-4 h-4 animate-spin" style="animation-duration: 4s;"></i>
+        <span>Revenue-first · AI-native strategic consulting</span>
+      </div>
+
+      <div class="space-y-6 max-w-5xl mx-auto">
+        <h1 class="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter leading-[0.92] text-white">
+          No es solo tecnología.<br />
+          Es <span class="text-brand-orange glow-accent">estrategia.</span>
+        </h1>
         
-        <!-- Left Slogans -->
-        <div class="lg:col-span-7 space-y-8 text-left">
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-card border border-slate-800 text-[11px] text-brand-orange font-mono tracking-wider uppercase">
-            <i data-lucide="flame" class="w-3.5 h-3.5 animate-pulse"></i>
-            <span>MERGE SPRINT® · DE DESAFÍOS A POSIBILIDADES</span>
+        <!-- Accenture Signature Chevron -->
+        <div class="flex items-center justify-center gap-3 text-brand-orange">
+          <span class="text-5xl font-black animate-pulse">&gt;&gt;</span>
+          <div class="h-[3px] w-24 bg-gradient-to-r from-brand-orange to-transparent"></div>
+        </div>
+      </div>
+
+      <div class="max-w-3xl mx-auto space-y-6">
+        <p class="text-xl md:text-2xl text-slate-200 font-light leading-relaxed italic border-l-4 border-brand-orange pl-6 py-2 text-left bg-brand-navy/60 rounded-r-xl backdrop-blur-sm">
+          "Con IA, las fronteras entre la estrategia de negocio y la estrategia tecnológica <strong class="text-brand-orange font-bold glow-accent">deben desaparecer</strong>."
+        </p>
+        <p class="text-sm md:text-base text-slate-400 font-light leading-relaxed text-left">
+          Las empresas que integran IA en el núcleo de su estrategia no solo optimizan procesos aislados: reinventan cómo se crea valor en el mercado. ¿Cómo están evolucionando las conversaciones en tu organización?
+        </p>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-5 pt-6">
+        <button 
+          onclick="scrollToId('contacto')"
+          class="w-full sm:w-auto bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold px-8 py-4 rounded text-xs tracking-widest uppercase shadow-2xl shadow-brand-orange/30 flex items-center justify-center gap-3 transition-all hover:translate-y-[-2px]"
+        >
+          <span>Agenda Reunión Directiva</span>
+          <i data-lucide="chevron-right" class="w-4 h-4"></i>
+        </button>
+        <button 
+          onclick="scrollToId('comparador')"
+          class="w-full sm:w-auto bg-brand-card hover:bg-slate-900/80 text-slate-200 border border-slate-800 hover:border-slate-700 font-bold px-8 py-4 rounded text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2"
+        >
+          <i data-lucide="activity" class="w-4 h-4 text-brand-orange"></i>
+          <span>Ver Estrategia Espejo</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION: THE APPEARING TABLE (TABLA DE IMPACTO ESPEJO - ESTILO ACCENTURE) -->
+  <section id="comparador" class="py-24 bg-brand-dark clip-diagonal-1 relative z-10 border-y border-slate-900/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      
+      <div class="text-center max-w-3xl mx-auto mb-20">
+        <span class="text-xs font-mono text-brand-orange uppercase tracking-widest block mb-2">Análisis de Decisión</span>
+        <h2 class="text-4xl font-black text-white tracking-tight">La Diferencia: Enfoque Espejo</h2>
+        <p class="text-slate-400 text-sm font-light leading-relaxed mt-2">
+          Compara el comportamiento tradicional frente al formato ágil de MERGE Sprint® para dar visibilidad de resultados a tu organización hoy mismo.
+        </p>
+      </div>
+
+      <!-- TABLE CONTAINER (GLASSMORPHISM WITH ANIMATED COLUMNS) -->
+      <div class="bg-brand-navy/80 border border-slate-850 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-md">
+        
+        <!-- Table Header (Hidden on small mobile) -->
+        <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 font-mono text-xs uppercase tracking-wider text-slate-500 font-bold">
+          <div class="md:col-span-4">Criterio Corporativo</div>
+          <div class="md:col-span-4 text-rose-500">Comités Tradicionales de IA</div>
+          <div class="md:col-span-4 text-emerald-400">MERGE Sprint® (MINDMERGE)</div>
+        </div>
+
+        <!-- Table Row 1 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-brand-card/25">
+          <div class="md:col-span-4 space-y-1">
+            <h4 class="text-sm font-bold text-white uppercase tracking-wider">01 · Tiempo de Validación</h4>
+            <p class="text-[11px] text-slate-500">Velocidad desde la idea hasta el prototipo tangible.</p>
+          </div>
+          
+          <!-- Column A -->
+          <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
+            <span class="text-[10px] font-mono text-rose-500 uppercase tracking-widest block md:hidden">Comités Tradicionales</span>
+            <div class="flex items-center justify-between text-xs text-slate-350 mb-1">
+              <span>3 a 6 meses de discusión</span>
+              <span class="text-rose-500 font-mono">10%</span>
+            </div>
+            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+              <div class="bg-rose-500 h-full w-[10%] animate-pulse"></div>
+            </div>
           </div>
 
-          <div class="space-y-4">
-            <h1 class="text-4xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.05] text-white">
-              No es solo tecnología.<br />
-              Es <span class="text-brand-orange relative inline-block">estrategia.</span>
-            </h1>
-            <div class="h-1.5 w-16 bg-brand-orange rounded"></div>
-          </div>
-
-          <div class="border-l-2 border-slate-800 pl-5 py-1 space-y-3">
-            <p class="text-lg md:text-xl text-slate-300 font-light leading-relaxed italic">
-              "Con IA, las fronteras entre la estrategia de negocio y la estrategia tecnológica <strong class="text-brand-orange font-bold">deben desaparecer</strong>."
-            </p>
-            <p class="text-sm text-slate-400 font-light leading-relaxed max-w-xl">
-              Las empresas que integran IA en el núcleo de su estrategia no solo optimizan lo que hacen: reinventan cómo crean valor. ¿Cómo están evolucionando las conversaciones en tu organización?
-            </p>
-          </div>
-
-          <div class="flex flex-col sm:flex-row items-center gap-4 pt-4">
-            <button 
-              onclick="scrollToId('contacto')"
-              class="w-full sm:w-auto bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold px-8 py-4 rounded text-xs tracking-wider uppercase shadow-xl shadow-brand-orange/25 flex items-center justify-center gap-2 transition-all hover:translate-y-[-2px]"
-            >
-              <span>Agenda Conversación de 30 min</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </button>
-            <button 
-              onclick="scrollToId('calculadora')"
-              class="w-full sm:w-auto bg-brand-card hover:bg-slate-900 text-slate-200 border border-slate-800 hover:border-slate-700 font-bold px-8 py-4 rounded text-xs tracking-wider uppercase transition-all"
-            >
-              <span>Calcular Costo de no Decidir</span>
-            </button>
+          <!-- Column B -->
+          <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
+            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block md:hidden">MERGE Sprint</span>
+            <div class="flex items-center justify-between text-xs text-white mb-1">
+              <span class="font-bold">Dos jornadas (12 horas)</span>
+              <span class="text-emerald-400 font-mono font-bold">100%</span>
+            </div>
+            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+              <div class="bg-brand-orange h-full w-full"></div>
+            </div>
           </div>
         </div>
 
-        <!-- Right Whiteboard Animation -->
-        <div class="lg:col-span-5">
-          <div class="relative bg-brand-card border border-slate-800 rounded-2xl p-6 md:p-8 overflow-hidden shadow-2xl">
-            <div class="absolute inset-0 bg-gradient-to-tr from-brand-orange/5 to-transparent pointer-events-none"></div>
-
-            <div class="mb-6 pb-4 border-b border-slate-850 flex justify-between items-center">
-              <span class="text-[10px] font-mono text-brand-orange uppercase tracking-widest font-bold">Whiteboard Táctico</span>
-              <span class="text-[9px] bg-emerald-950 text-emerald-400 px-2 py-0.5 rounded font-mono uppercase">En vivo</span>
+        <!-- Table Row 2 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-brand-card/25">
+          <div class="md:col-span-4 space-y-1">
+            <h4 class="text-sm font-bold text-white uppercase tracking-wider">02 · Claridad del Caso</h4>
+            <p class="text-[11px] text-slate-500">Criterio objetivo de impacto y viabilidad.</p>
+          </div>
+          
+          <!-- Column A -->
+          <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
+            <span class="text-[10px] font-mono text-rose-500 uppercase tracking-widest block md:hidden">Comités Tradicionales</span>
+            <div class="flex items-center justify-between text-xs text-slate-350 mb-1">
+              <span>Foco en modas / Ideas difusas</span>
+              <span class="text-rose-500 font-mono">25%</span>
             </div>
-
-            <!-- SVG drawing animated lines -->
-            <div class="relative bg-brand-navy border border-slate-850 rounded-xl p-4 h-64 flex flex-col justify-between overflow-hidden">
-              <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ff5500_1px,transparent_1px)] [background-size:12px_12px]"></div>
-              
-              <svg class="absolute inset-0 w-full h-full p-2 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Standard Comités Path -->
-                <path id="svg-path-1" d="M 20 180 Q 70 20, 150 120 T 320 60" fill="none" stroke="#475569" stroke-width="3" stroke-dasharray="6 6" class="animate-pulse" />
-                <!-- Merge Sprint Path -->
-                <path id="svg-path-2" d="M 20 180 C 100 180, 120 50, 320 50" fill="none" stroke="#ff5500" stroke-width="4" class="animate-dash hidden" />
-                
-                <circle cx="20" cy="180" r="8" fill="#ff5500" />
-                <circle id="svg-endpoint" cx="320" cy="60" r="12" fill="#475569" class="transition-all duration-300" />
-              </svg>
-
-              <div class="relative z-10 space-y-1">
-                <p class="text-[10px] font-mono text-slate-500 uppercase">Flujo Estratégico actual:</p>
-                <h4 id="playbook-title" class="text-xs font-bold text-white uppercase tracking-wider">⚠️ Comités fragmentados sin conclusión</h4>
-              </div>
-
-              <div class="relative z-10 flex justify-between gap-2 mt-auto">
-                <button 
-                  id="btn-playbook-1"
-                  onclick="setPlaybookStep(1)"
-                  class="flex-1 text-[9px] uppercase tracking-wider py-2 rounded font-mono font-bold bg-brand-orange text-white"
-                >
-                  Comités Tradicionales
-                </button>
-                <button 
-                  id="btn-playbook-2"
-                  onclick="setPlaybookStep(2)"
-                  class="flex-1 text-[9px] uppercase tracking-wider py-2 rounded font-mono font-bold bg-[#020813] border border-slate-800 text-slate-400"
-                >
-                  Merge Sprint
-                </button>
-              </div>
+            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+              <div class="bg-rose-500 h-full w-[25%]"></div>
             </div>
+          </div>
 
-            <div class="mt-4 text-[10px] text-slate-400 italic text-center">
-              Toca los botones del tablero para comparar las rutas estratégicas.
+          <!-- Column B -->
+          <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
+            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block md:hidden">MERGE Sprint</span>
+            <div class="flex items-center justify-between text-xs text-white mb-1">
+              <span class="font-bold">Caso #1 priorizado con ROI</span>
+              <span class="text-emerald-400 font-mono font-bold">95%</span>
+            </div>
+            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+              <div class="bg-[#7c3aed] h-full w-[95%]"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Row 3 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-brand-card/25">
+          <div class="md:col-span-4 space-y-1">
+            <h4 class="text-sm font-bold text-white uppercase tracking-wider">03 · Evidencia Técnica</h4>
+            <p class="text-[11px] text-slate-500">Demostración funcional con tus propios datos.</p>
+          </div>
+          
+          <!-- Column A -->
+          <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
+            <span class="text-[10px] font-mono text-rose-500 uppercase tracking-widest block md:hidden">Comités Tradicionales</span>
+            <div class="flex items-center justify-between text-xs text-slate-350 mb-1">
+              <span>Promesas teóricas de vendors</span>
+              <span class="text-rose-500 font-mono">15%</span>
+            </div>
+            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+              <div class="bg-rose-500 h-full w-[15%]"></div>
+            </div>
+          </div>
+
+          <!-- Column B -->
+          <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
+            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block md:hidden">MERGE Sprint</span>
+            <div class="flex items-center justify-between text-xs text-white mb-1">
+              <span class="font-bold">Prototipo funcional en vivo</span>
+              <span class="text-emerald-400 font-mono font-bold">100%</span>
+            </div>
+            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+              <div class="bg-brand-orange h-full w-full"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Row 4 -->
+        <div class="grid grid-cols-1 md:grid-cols-12 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-brand-card/25">
+          <div class="md:col-span-4 space-y-1">
+            <h4 class="text-sm font-bold text-white uppercase tracking-wider">04 · Entregable Final</h4>
+            <p class="text-[11px] text-slate-500">Ruta de acción clara para el equipo operativo.</p>
+          </div>
+          
+          <!-- Column A -->
+          <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
+            <span class="text-[10px] font-mono text-rose-500 uppercase tracking-widest block md:hidden">Comités Tradicionales</span>
+            <div class="flex items-center justify-between text-xs text-slate-350 mb-1">
+              <span>Pilotos fragmentados, sin dueños</span>
+              <span class="text-rose-500 font-mono">5%</span>
+            </div>
+            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+              <div class="bg-rose-500 h-full w-[5%] animate-pulse"></div>
+            </div>
+          </div>
+
+          <!-- Column B -->
+          <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
+            <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block md:hidden">MERGE Sprint</span>
+            <div class="flex items-center justify-between text-xs text-white mb-1">
+              <span class="font-bold">Roadmap a 90 días ejecutable</span>
+              <span class="text-emerald-400 font-mono font-bold">100%</span>
+            </div>
+            <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
+              <div class="bg-[#7c3aed] h-full w-full"></div>
             </div>
           </div>
         </div>
 
       </div>
+
     </div>
   </section>
 
   <!-- CALCULADORA DE COSTO DE NO DECIDIR -->
-  <section id="calculadora" class="py-20 bg-brand-dark relative overflow-hidden">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section id="calculadora" class="py-24 bg-brand-dark relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       
-      <div class="text-center max-w-3xl mx-auto mb-16">
+      <div class="text-center max-w-3xl mx-auto mb-20">
         <span class="text-xs font-mono text-brand-orange uppercase tracking-widest block mb-1">Para Junta Directiva y CEO</span>
-        <h2 class="text-3xl md:text-4xl font-black mb-4 text-white">
+        <h2 class="text-4xl font-black mb-4 text-white tracking-tight">
           Calculadora del Costo de No Decidir
         </h2>
-        <p class="text-slate-400 text-sm font-light">
-          Calcula con base en compensación directa y costos de inacción cuántos recursos consume tu organización posponiendo un roadmap ágil.
+        <p class="text-slate-400 text-sm font-light leading-relaxed">
+          Estima con exactitud el desperdicio financiero derivado de postergar un plan estratégico de Inteligencia Artificial para tu negocio.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch text-left">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch text-left">
         
         <!-- Left Parameters -->
-        <div class="lg:col-span-7 bg-brand-navy border border-slate-850 p-6 md:p-8 rounded-2xl flex flex-col justify-between">
+        <div class="lg:col-span-7 bg-brand-navy border border-slate-850 p-6 md:p-10 rounded-2xl flex flex-col justify-between shadow-xl">
           <div>
-            <h3 class="text-sm font-bold text-slate-200 uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-slate-800 pb-3">
-              <i data-lucide="sliders" class="w-5 h-5 text-brand-orange"></i>
-              <span>Configuración de Tu Situación Actual</span>
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-8 flex items-center gap-3 border-b border-slate-900 pb-4">
+              <i data-lucide="sliders" class="text-brand-orange w-5 h-5"></i>
+              <span>Simulación de Escenario Corporativo</span>
             </h3>
 
-            <div class="space-y-6">
+            <div class="space-y-8">
               <!-- Slider Months -->
               <div>
                 <div class="flex justify-between mb-2 text-xs">
-                  <label class="font-semibold text-slate-300">¿Cuántos meses lleva tu empresa explorando IA?</label>
-                  <span id="label-months" class="text-brand-orange font-mono font-bold">6 meses</span>
+                  <label class="font-bold text-slate-300">¿Meses explorando IA sin decisiones claras de junta?</label>
+                  <span id="label-months" class="text-brand-orange font-mono font-bold text-glow">6 meses</span>
                 </div>
                 <input 
                   type="range" id="input-months" min="1" max="24" value="6" 
@@ -266,8 +466,8 @@
               <!-- Slider Areas -->
               <div>
                 <div class="flex justify-between mb-2 text-xs">
-                  <label class="font-semibold text-slate-300">¿Cuántas áreas organizacionales intentan pilotos aislados?</label>
-                  <span id="label-areas" class="text-brand-orange font-mono font-bold">3 áreas</span>
+                  <label class="font-bold text-slate-300">¿Áreas de negocio ejecutando pilotos fragmentados?</label>
+                  <span id="label-areas" class="text-brand-orange font-mono font-bold text-glow">3 áreas</span>
                 </div>
                 <input 
                   type="range" id="input-areas" min="1" max="10" value="3" 
@@ -279,8 +479,8 @@
               <!-- Slider People -->
               <div>
                 <div class="flex justify-between mb-2 text-xs">
-                  <label class="font-semibold text-slate-300">¿Cuántas personas participan en comités semanales sobre IA?</label>
-                  <span id="label-people" class="text-brand-orange font-mono font-bold">8 directores</span>
+                  <label class="font-bold text-slate-300">¿Directivos involucrados en reuniones semanales?</label>
+                  <span id="label-people" class="text-brand-orange font-mono font-bold text-glow">8 líderes</span>
                 </div>
                 <input 
                   type="range" id="input-people" min="2" max="30" value="8" 
@@ -290,15 +490,15 @@
               </div>
 
               <!-- Checkboxes -->
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-800">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-6 border-t border-slate-900">
                 <div class="flex items-start gap-3">
                   <input 
                     type="checkbox" id="input-bcase" 
                     onchange="recalculate()"
-                    class="w-4 h-4 accent-brand-orange rounded bg-brand-dark border-slate-800 text-brand-orange mt-0.5"
+                    class="w-4 h-4 accent-brand-orange rounded bg-brand-dark border-slate-800 text-brand-orange mt-1 cursor-pointer"
                   />
-                  <label for="input-bcase" class="text-xs text-slate-400 select-none">
-                    ¿Cuentan con un caso de negocio priorizado con retorno claro?
+                  <label for="input-bcase" class="text-xs text-slate-400 select-none cursor-pointer leading-normal">
+                    ¿Se dispone de un caso de negocio priorizado con retorno comercial (ROI)?
                   </label>
                 </div>
 
@@ -306,10 +506,10 @@
                   <input 
                     type="checkbox" id="input-proto" 
                     onchange="recalculate()"
-                    class="w-4 h-4 accent-brand-orange rounded bg-brand-dark border-slate-800 text-brand-orange mt-0.5"
+                    class="w-4 h-4 accent-brand-orange rounded bg-brand-dark border-slate-800 text-brand-orange mt-1 cursor-pointer"
                   />
-                  <label for="input-proto" class="text-xs text-slate-400 select-none">
-                    ¿Cuentan con un prototipo real de IA conectado a un KPI crítico?
+                  <label for="input-proto" class="text-xs text-slate-400 select-none cursor-pointer leading-normal">
+                    ¿Se cuenta con un prototipo real de IA conectado a un KPI de negocio?
                   </label>
                 </div>
               </div>
@@ -318,54 +518,55 @@
         </div>
 
         <!-- Right Output Calculations -->
-        <div class="lg:col-span-5 bg-gradient-to-b from-brand-card to-brand-navy border border-slate-850 p-6 md:p-8 rounded-2xl flex flex-col justify-between">
+        <div class="lg:col-span-5 bg-gradient-to-b from-brand-card to-brand-navy border border-slate-850 p-6 md:p-8 rounded-2xl flex flex-col justify-between shadow-2xl">
           <div>
-            <span class="text-[10px] font-mono tracking-widest text-brand-orange uppercase block mb-1">Costo Acumulado Estimado</span>
-            <h3 class="text-lg font-bold text-white mb-6">Pérdida Económica por Dilación</h3>
+            <span class="text-[9px] font-mono tracking-widest text-brand-orange uppercase block mb-1">Impacto de Inactividad</span>
+            <h3 class="text-lg font-bold text-white mb-6">Pérdida Financiera Acumulada</h3>
             
             <div class="space-y-6">
-              <div class="bg-brand-navy border border-slate-800 rounded p-5 text-center relative overflow-hidden">
-                <span class="text-[10px] uppercase font-mono tracking-wider text-slate-500 block mb-1">Impacto de Productividad Perdido</span>
-                <span id="calc-total" class="text-3xl sm:text-4xl font-extrabold text-brand-orange font-mono block">
+              <div class="bg-brand-navy/90 border border-slate-800 rounded p-6 text-center relative overflow-hidden">
+                <span class="text-[10px] uppercase font-mono tracking-wider text-slate-500 block mb-1">Costo Financiero Estimado</span>
+                <span id="calc-total" class="text-4xl sm:text-5xl font-black text-brand-orange font-mono block text-glow tracking-tighter">
                   $0 USD
                 </span>
-                <span class="text-[10px] text-slate-400 block mt-1">Costo total por horas de comités e inactividad comercial</span>
+                <span class="text-[9px] text-slate-400 block mt-2">Suma de compensación directiva y costo de oportunidad latente</span>
               </div>
 
+              <!-- Details breakdown -->
               <div class="space-y-3">
-                <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-850">
+                <div class="flex items-center justify-between text-xs py-2 border-b border-slate-850">
                   <span class="text-slate-400 flex items-center gap-1.5">
                     <i data-lucide="clock" class="w-3.5 h-3.5 text-brand-orange"></i>
-                    <span>Horas directivas consumidas:</span>
+                    <span>Horas consumidas en comités:</span>
                   </span>
                   <strong id="calc-hours" class="text-slate-200 font-mono">0 hrs</strong>
                 </div>
 
-                <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-850">
+                <div class="flex items-center justify-between text-xs py-2 border-b border-slate-850">
                   <span class="text-slate-400 flex items-center gap-1.5">
                     <i data-lucide="users" class="w-3.5 h-3.5 text-brand-orange"></i>
-                    <span>Coste de comités internos:</span>
+                    <span>Coste de compensación de comités:</span>
                   </span>
                   <strong id="calc-direct" class="text-slate-200 font-mono">$0 USD</strong>
                 </div>
 
-                <div class="flex items-center justify-between text-xs py-1.5 border-b border-slate-850">
+                <div class="flex items-center justify-between text-xs py-2 border-b border-slate-850">
                   <span class="text-slate-400 flex items-center gap-1.5">
                     <i data-lucide="trending-up" class="w-3.5 h-3.5 text-brand-orange"></i>
-                    <span>Costo de oportunidad perdido:</span>
+                    <span>Pérdida por inactividad comercial:</span>
                   </span>
                   <strong id="calc-opportunity" class="text-slate-200 font-mono">$0 USD</strong>
                 </div>
               </div>
 
-              <!-- Danger Badge Alert -->
-              <div class="p-4 bg-brand-navy/60 rounded border border-slate-800 flex items-center gap-3">
-                <div class="p-2 bg-rose-950/40 rounded border border-rose-900/30 text-rose-500 flex-shrink-0 animate-pulse">
+              <!-- Risk meter alert -->
+              <div class="p-4 bg-brand-navy/80 rounded border border-slate-850 flex items-center gap-4">
+                <div class="p-2.5 bg-rose-950/30 rounded border border-rose-900/30 text-rose-500 flex-shrink-0 animate-pulse">
                   <i data-lucide="shield-alert" class="w-5 h-5"></i>
                 </div>
                 <div>
-                  <span class="text-[9px] uppercase font-mono tracking-wider text-slate-500 block">Diagnóstico Directivo</span>
-                  <p id="calc-risk" class="text-xs font-extrabold text-slate-300"></p>
+                  <span class="text-[9px] uppercase font-mono tracking-wider text-slate-500 block">Estatus del Riesgo</span>
+                  <p id="calc-risk" class="text-xs font-bold leading-normal"></p>
                 </div>
               </div>
             </div>
@@ -374,7 +575,7 @@
           <div class="mt-8 pt-6 border-t border-slate-850">
             <button 
               onclick="scrollToId('contacto')"
-              class="w-full bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold text-xs py-3.5 px-4 rounded transition-all text-center uppercase tracking-wider flex items-center justify-center gap-2"
+              class="w-full bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold text-xs py-4 px-4 rounded transition-all text-center uppercase tracking-widest flex items-center justify-center gap-2 active:scale-95 shadow-lg shadow-brand-orange/25"
             >
               <span>De la Idea a la Acción en 2 Jornadas</span>
               <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -386,152 +587,189 @@
     </div>
   </section>
 
-  <!-- SECCIÓN 4: COMO FUNCIONA (METODOLOGÍA DE 5 PASOS + DYNAMIC TERMINAL) -->
-  <section id="metodologia" class="py-20 bg-brand-navy relative border-t border-slate-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- INTERACTIVE METHODOLOGY PLAYBOOK (Accenture Style Slider Accordion) -->
+  <section id="metodologia" class="py-24 bg-brand-navy clip-diagonal-2 relative z-10 border-t border-slate-900/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-xs font-mono text-brand-orange uppercase tracking-widest block mb-1">Metodología Propietaria</span>
-        <h2 class="text-3xl md:text-4xl font-black mb-4 text-white">
-          Un Sprint. Cinco Pasos. Resultados de Negocio.
+      <div class="text-center max-w-3xl mx-auto mb-20">
+        <span class="text-xs font-mono text-brand-orange uppercase tracking-widest block mb-2">Metodología Propietaria</span>
+        <h2 class="text-4xl font-black mb-4 text-white tracking-tight font-extrabold">
+          Cinco Pasos. Resultados de Negocio.
         </h2>
-        <p class="text-slate-400 text-sm font-light">
-          La co-creación estratégica acelera meses de iteración con Claude como copiloto de orquestación en vivo.
+        <p class="text-slate-400 text-sm font-light leading-relaxed">
+          Sintetizamos meses de consultoría en una experiencia intensiva de 12 horas presenciales, uniendo Design Thinking, Lean Startup e IA Generativa como motor de orquestación técnica en tiempo real.
         </p>
       </div>
 
-      <!-- Steps Timeline Layout -->
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-6 text-left mb-16">
-        <!-- Step 1 -->
-        <div class="bg-brand-dark border border-slate-850 p-6 rounded-2xl relative">
-          <div class="absolute top-4 right-4 text-3xl font-extrabold text-slate-900/50 font-mono">01</div>
-          <div class="h-10 w-10 bg-brand-orange/10 border border-brand-orange/20 rounded flex items-center justify-center text-brand-orange font-mono font-bold mb-6 text-xs">MAP</div>
-          <h3 class="text-sm font-bold text-white mb-2 uppercase tracking-wide">Mapeo de Dolores</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">Diagnóstico express en tiempo récord del núcleo digital para revelar el mayor potencial comercial.</p>
-        </div>
-        <!-- Step 2 -->
-        <div class="bg-brand-dark border border-slate-850 p-6 rounded-2xl relative">
-          <div class="absolute top-4 right-4 text-3xl font-extrabold text-slate-900/50 font-mono">02</div>
-          <div class="h-10 w-10 bg-brand-orange/10 border border-brand-orange/20 rounded flex items-center justify-center text-brand-orange font-mono font-bold mb-6 text-xs">ENV</div>
-          <h3 class="text-sm font-bold text-white mb-2 uppercase tracking-wide">Selección del Caso</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">Priorización objetiva de iniciativas basada en impacto financiero. Selección del caso #1.</p>
-        </div>
-        <!-- Step 3 -->
-        <div class="bg-brand-dark border border-slate-850 p-6 rounded-2xl relative">
-          <div class="absolute top-4 right-4 text-3xl font-extrabold text-slate-900/50 font-mono">03</div>
-          <div class="h-10 w-10 bg-brand-orange/10 border border-brand-orange/20 rounded flex items-center justify-center text-brand-orange font-mono font-bold mb-6 text-xs">REI</div>
-          <h3 class="text-sm font-bold text-white mb-2 uppercase tracking-wide">Prototipado Vivo</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">Construcción acelerada del prototipo funcional interactivo empleando a Claude en vivo.</p>
-        </div>
-        <!-- Step 4 -->
-        <div class="bg-brand-dark border border-slate-850 p-6 rounded-2xl relative">
-          <div class="absolute top-4 right-4 text-3xl font-extrabold text-slate-900/50 font-mono">04</div>
-          <div class="h-10 w-10 bg-brand-orange/10 border border-brand-orange/20 rounded flex items-center justify-center text-brand-orange font-mono font-bold mb-6 text-xs">GEN</div>
-          <h3 class="text-sm font-bold text-white mb-2 uppercase tracking-wide">Plan de Escala</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">Estrategia detallada de implementación técnica para escalar de prototipo a MVP a 90 días.</p>
-        </div>
-        <!-- Step 5 -->
-        <div class="bg-brand-dark border border-slate-850 p-6 rounded-2xl relative">
-          <div class="absolute top-4 right-4 text-3xl font-extrabold text-slate-900/50 font-mono">05</div>
-          <div class="h-10 w-10 bg-brand-orange/10 border border-brand-orange/20 rounded flex items-center justify-center text-brand-orange font-mono font-bold mb-6 text-xs">EVO</div>
-          <h3 class="text-sm font-bold text-white mb-2 uppercase tracking-wide">Compromisos</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">Cierre con responsabilidades concretas de ejecución y definición de dueños del roadmap.</p>
-        </div>
-      </div>
-
-      <!-- DYNAMIC MOVING TERMINAL: Claude Simulation Console -->
-      <div class="bg-brand-card border border-slate-850 rounded-2xl p-6 max-w-4xl mx-auto shadow-2xl relative overflow-hidden text-left">
-        <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
-          <div class="flex items-center gap-2">
-            <div class="flex gap-1.5">
-              <div class="w-3 h-3 rounded-full bg-rose-500"></div>
-              <div class="w-3 h-3 rounded-full bg-amber-500"></div>
-              <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
-            </div>
-            <span class="text-[10px] font-mono text-slate-400 ml-4">CLAUDE COPILOT CONSOLE // SIMULACIÓN EN TIEMPO REAL</span>
-          </div>
+      <!-- Playbook Interactive Sliding Tabs -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        
+        <!-- Left Selection Column -->
+        <div id="playbook-tabs" class="lg:col-span-4 flex flex-col gap-3 justify-center">
+          <!-- Active Tab 1 -->
           <button 
-            onclick="runTerminalSimulation()"
-            id="btn-terminal-restart"
-            class="flex items-center gap-1 bg-brand-orange hover:bg-brand-orangeHover text-white font-mono text-[9px] px-3 py-1 rounded font-bold uppercase transition-all"
+            id="tab-step-1" onclick="setActivePlaybookStepIndex(1)"
+            class="tab-transition w-full text-left px-5 py-4 rounded border text-xs font-bold flex items-center justify-between uppercase tracking-widest bg-gradient-to-r from-slate-900 to-brand-card border-brand-orange text-white"
           >
-            <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
-            <span>Reiniciar Simulación</span>
+            <span class="flex items-center gap-3">
+              <span class="font-mono text-brand-orange font-bold text-sm">01</span>
+              <span>MAP · Mapeo Core</span>
+            </span>
+            <i data-lucide="chevron-right" class="w-4 h-4 text-brand-orange"></i>
+          </button>
+
+          <!-- Tab 2 -->
+          <button 
+            id="tab-step-2" onclick="setActivePlaybookStepIndex(2)"
+            class="tab-transition w-full text-left px-5 py-4 rounded border text-xs font-bold flex items-center justify-between uppercase tracking-widest bg-brand-navy hover:bg-slate-900 border-slate-800 text-slate-400 hover:text-white"
+          >
+            <span class="flex items-center gap-3">
+              <span class="font-mono text-slate-500 font-bold">02</span>
+              <span>ENV · Priorización</span>
+            </span>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+          </button>
+
+          <!-- Tab 3 -->
+          <button 
+            id="tab-step-3" onclick="setActivePlaybookStepIndex(3)"
+            class="tab-transition w-full text-left px-5 py-4 rounded border text-xs font-bold flex items-center justify-between uppercase tracking-widest bg-brand-navy hover:bg-slate-900 border-slate-800 text-slate-400 hover:text-white"
+          >
+            <span class="flex items-center gap-3">
+              <span class="font-mono text-slate-500 font-bold">03</span>
+              <span>REI · Prototipo</span>
+            </span>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+          </button>
+
+          <!-- Tab 4 -->
+          <button 
+            id="tab-step-4" onclick="setActivePlaybookStepIndex(4)"
+            class="tab-transition w-full text-left px-5 py-4 rounded border text-xs font-bold flex items-center justify-between uppercase tracking-widest bg-brand-navy hover:bg-slate-900 border-slate-800 text-slate-400 hover:text-white"
+          >
+            <span class="flex items-center gap-3">
+              <span class="font-mono text-slate-500 font-bold">04</span>
+              <span>GEN · Plan de Escala</span>
+            </span>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
+          </button>
+
+          <!-- Tab 5 -->
+          <button 
+            id="tab-step-5" onclick="setActivePlaybookStepIndex(5)"
+            class="tab-transition w-full text-left px-5 py-4 rounded border text-xs font-bold flex items-center justify-between uppercase tracking-widest bg-brand-navy hover:bg-slate-900 border-slate-800 text-slate-400 hover:text-white"
+          >
+            <span class="flex items-center gap-3">
+              <span class="font-mono text-slate-500 font-bold">05</span>
+              <span>EVO · Compromisos</span>
+            </span>
+            <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-600"></i>
           </button>
         </div>
 
-        <div id="terminal-screen" class="bg-brand-navy border border-slate-850 rounded-xl p-4 font-mono text-xs space-y-2 h-48 overflow-y-auto relative scrollbar-thin">
-          <!-- Logs will be dynamically appended here by javascript -->
+        <!-- Right Side display (logs & dynamic sandbox terminal) -->
+        <div class="lg:col-span-8 bg-brand-card border border-slate-850 p-6 md:p-10 rounded-2xl shadow-2xl relative overflow-hidden flex flex-col justify-between text-left">
+          <div class="absolute inset-0 bg-gradient-to-br from-brand-orange/5 to-brand-purple/5 pointer-events-none"></div>
+
+          <div>
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+              <span id="slide-phase" class="text-[10px] font-mono text-brand-orange uppercase tracking-widest font-bold">Fase 1 de 5</span>
+              <span class="text-[9px] bg-brand-orange/10 border border-brand-orange/20 text-brand-orange px-2.5 py-0.5 rounded uppercase font-bold tracking-wider font-mono">Merge Method®</span>
+            </div>
+
+            <div class="space-y-6">
+              <div>
+                <h3 id="slide-title" class="text-2xl font-black text-white leading-tight">Mapeo del Core Digital (MAP)</h3>
+                <p id="slide-desc" class="text-sm text-slate-300 leading-relaxed font-light mt-3">
+                  Evaluación de la arquitectura de datos, infraestructura cloud y procesos para detectar cuellos de botella con mayor potencial de optimización inmediata.
+                </p>
+              </div>
+
+              <!-- Live dynamic sandbox simulation code terminal -->
+              <div class="bg-brand-navy border border-slate-900 rounded-xl p-4 font-mono text-xs h-40 overflow-y-auto relative scrollbar-thin mt-4">
+                <div class="absolute top-2 right-2 flex gap-1">
+                  <span class="h-2 w-2 rounded-full bg-rose-500"></span>
+                  <span class="h-2 w-2 rounded-full bg-amber-500"></span>
+                  <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                </div>
+                <div id="terminal-step-screen" class="text-slate-300 space-y-1.5">
+                  <!-- Logs dynamically updated by JS tab trigger -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-8 pt-4 border-t border-slate-800 flex justify-between items-center text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+            <span id="slide-deliverable">Entregable: Diagnóstico Core Digital</span>
+            <span class="text-brand-orange font-bold font-black">MINDMERGE</span>
+          </div>
+
         </div>
 
-        <div class="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] text-slate-400 italic">
-          <span>*Co-creamos código, workflows y prototipos interactivos frente a tu junta de manera veloz.</span>
-          <span class="text-brand-orange font-mono uppercase tracking-widest font-bold">REVENUE-FIRST. AI-NATIVE.</span>
-        </div>
       </div>
 
     </div>
   </section>
 
-  <!-- SECCIÓN 5: CASOS DE USO POR SECTOR (DINÁMICO CON DIAGRAMAS SVG) -->
-  <section id="casos" class="py-20 bg-brand-dark border-t border-slate-900 relative">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+  <!-- CASOS DE USO POR SECTOR (ESTILO DINÁMICO ACCENTURE) -->
+  <section id="casos" class="py-24 bg-brand-dark border-t border-slate-900/60 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-xs font-mono text-brand-orange uppercase tracking-widest block mb-1">Experiencia y Casos Reales</span>
-        <h2 class="text-3xl md:text-4xl font-black mb-4 text-white">
-          Estrategia Aplicada por Sector
+      <div class="text-center max-w-3xl mx-auto mb-20">
+        <span class="text-xs font-mono text-brand-orange uppercase tracking-widest block mb-2">Estrategia Aplicada</span>
+        <h2 class="text-4xl font-black mb-4 text-white tracking-tight">
+          Casos de Uso por Industria
         </h2>
-        <p class="text-slate-400 text-sm font-light">
-          MINDMERGE ha co-creado soluciones con líderes empresariales de salud, seguros, banca, consumo masivo y telecomunicaciones. Elige tu sector:
+        <p class="text-slate-400 text-sm font-light leading-relaxed">
+          MINDMERGE ha co-creado soluciones reales con juntas directivas de salud, seguros, banca, consumo masivo y telecomunicaciones. Elige tu sector:
         </p>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start text-left">
-        <!-- Left Buttons Selector -->
-        <div id="sector-buttons" class="lg:col-span-4 grid grid-cols-2 lg:grid-cols-1 gap-2">
-          <!-- Dynamic Buttons injected here -->
+        <!-- Selector Buttons -->
+        <div id="sector-buttons" class="lg:col-span-4 grid grid-cols-2 lg:grid-cols-1 gap-2.5">
+          <!-- Dynamically generated buttons with Lucide icons will run here -->
         </div>
 
-        <!-- Right Case Details -->
+        <!-- Case Display card with Accenture Glowing style -->
         <div class="lg:col-span-8 bg-brand-navy border border-slate-800 p-6 md:p-10 rounded-2xl shadow-xl relative overflow-hidden">
           <div class="absolute top-0 right-0 w-64 h-64 bg-brand-orange/5 rounded-full blur-3xl pointer-events-none"></div>
 
           <div class="flex flex-col md:flex-row md:items-center justify-between mb-6 pb-6 border-b border-slate-800 gap-4">
             <div>
-              <span class="text-[9px] font-mono uppercase tracking-widest text-brand-orange bg-brand-orange/10 border border-brand-orange/20 px-2.5 py-1 rounded-full font-bold">
-                CASO ESTUDIO MINDMERGE
+              <span class="text-[9px] font-mono uppercase tracking-widest text-brand-orange bg-brand-orange/10 border border-brand-orange/20 px-3 py-1.5 rounded-full font-bold">
+                CASO ESTUDIO DE NEGOCIO
               </span>
-              <h3 id="case-title" class="text-xl md:text-2xl font-extrabold text-white mt-3"></h3>
+              <h3 id="case-title" class="text-xl md:text-2xl font-extrabold text-white mt-4 leading-tight"></h3>
             </div>
-            <div class="flex items-center gap-1 text-emerald-400 text-[10px] font-bold uppercase font-mono tracking-wider bg-emerald-950/30 border border-emerald-900/40 px-3 py-1.5 rounded w-fit">
+            <div class="flex items-center gap-1 text-emerald-400 text-[10px] font-bold uppercase font-mono tracking-widest bg-emerald-950/30 border border-emerald-900/40 px-3 py-1.5 rounded w-fit">
               <i data-lucide="activity" class="w-3.5 h-3.5"></i>
               <span id="case-badge"></span>
             </div>
           </div>
 
           <!-- Dynamic SVG diagram container -->
-          <div class="bg-[#040c1a] border border-slate-850 rounded-xl p-4 mb-6">
+          <div class="bg-[#050e1f] border border-slate-850 rounded-xl p-4 mb-6">
             <span class="text-[9px] font-mono text-slate-500 uppercase block mb-3">Flujo del Proceso Automatizado</span>
             <div id="case-svg-container"></div>
           </div>
 
           <div class="space-y-6">
             <div>
-              <h4 class="text-[10px] uppercase font-mono tracking-wider text-slate-500 mb-2">Desafío Crítico Identificado:</h4>
-              <p id="case-problem" class="text-sm text-slate-300 leading-relaxed font-light"></p>
+              <h4 class="text-[10px] uppercase font-mono tracking-widest text-slate-500 mb-2 font-bold">Desafío Crítico Identificado:</h4>
+              <p id="case-problem" class="text-sm text-slate-350 leading-relaxed font-light"></p>
             </div>
 
             <div>
-              <h4 class="text-[10px] uppercase font-mono tracking-wider text-brand-orange mb-2">Solución de IA Generativa Desplegada:</h4>
+              <h4 class="text-[10px] uppercase font-mono tracking-widest text-brand-orange mb-2 font-bold">Solución de IA Generativa Desplegada:</h4>
               <p id="case-solution" class="text-sm text-white font-medium leading-relaxed bg-brand-card p-4 rounded border border-slate-850"></p>
             </div>
 
             <div class="p-4 bg-brand-orange/5 border border-brand-orange/10 rounded flex items-start gap-3">
-              <i data-lucide="check-circle" class="w-5 h-5 text-brand-orange flex-shrink-0 mt-0.5"></i>
+              <i data-lucide="check-circle" class="w-5 h-5 text-brand-orange flex-shrink-0 mt-0.5 animate-pulse"></i>
               <div>
-                <h5 class="text-[10px] uppercase font-mono tracking-wider text-indigo-300">Impacto Directo Obtenido:</h5>
-                <p id="case-metric" class="text-xs text-slate-200 font-bold mt-1 leading-relaxed"></p>
+                <h5 class="text-[10px] uppercase font-mono tracking-widest text-indigo-300 font-bold">Impacto Directo Obtenido:</h5>
+                <p id="case-metric" class="text-xs text-slate-200 font-bold mt-1.5 leading-relaxed"></p>
               </div>
             </div>
           </div>
@@ -546,51 +784,61 @@
     </div>
   </section>
 
-  <!-- POR QUÉ FUNCIONA -->
-  <section id="porque-funciona" class="py-20 bg-brand-navy border-t border-slate-900 text-left">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-xs font-mono text-brand-orange uppercase tracking-widest block mb-1">Diferenciadores</span>
-        <h2 class="text-3xl md:text-4xl font-black text-white">Sabemos de Negocio Antes de Saber de IA</h2>
+  <!-- POR QUÉ FUNCIONA (SABEMOS DE NEGOCIO ANTES DE IA) -->
+  <section id="porque-funciona" class="py-24 bg-brand-navy border-t border-slate-900 text-left relative">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      
+      <div class="text-center max-w-3xl mx-auto mb-20">
+        <span class="text-xs font-mono text-brand-orange uppercase tracking-widest block mb-2">Diferenciadores</span>
+        <h2 class="text-4xl font-black text-white tracking-tight">Sabemos de Negocio Antes de Saber de IA</h2>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-brand-dark border border-slate-850 p-6 rounded-xl space-y-4">
-          <div class="h-10 w-10 bg-brand-orange/10 text-brand-orange rounded flex items-center justify-center font-bold">01</div>
-          <h3 class="text-base font-bold text-white">Resultados el Mismo Día</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">Al finalizar la jornada, tu junta directiva cuenta con un prototipo funcional real, un caso priorizado y un mapa de ruta ejecutable a 90 días.</p>
+        <!-- Card 1 -->
+        <div class="kinetic-card p-8 rounded-xl space-y-4 shadow-xl">
+          <div class="h-10 w-10 bg-brand-orange/10 text-brand-orange rounded flex items-center justify-center font-mono font-bold text-sm">01</div>
+          <h3 class="text-lg font-bold text-white uppercase tracking-wider">Resultados el Mismo Día</h3>
+          <p class="text-xs text-slate-400 leading-relaxed font-light">
+            Al finalizar la jornada de 12 horas presenciales, tu junta directiva cuenta con un prototipo real, un caso de negocio priorizado y un mapa de ruta ejecutable a 90 días con dueños asignados.
+          </p>
         </div>
-        <div class="bg-brand-dark border border-slate-850 p-6 rounded-xl space-y-4">
-          <div class="h-10 w-10 bg-brand-orange/10 text-brand-orange rounded flex items-center justify-center font-bold">02</div>
-          <h3 class="text-base font-bold text-white">Co-creación con Expertos</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">Más de 15 años liderando transformación en Banca, Seguros y Salud. Entendemos las prioridades de negocio antes de proponer tecnología.</p>
+        <!-- Card 2 -->
+        <div class="kinetic-card p-8 rounded-xl space-y-4 shadow-xl">
+          <div class="h-10 w-10 bg-brand-orange/10 text-brand-orange rounded flex items-center justify-center font-mono font-bold text-sm">02</div>
+          <h3 class="text-lg font-bold text-white uppercase tracking-wider">Co-creación con Expertos</h3>
+          <p class="text-xs text-slate-400 leading-relaxed font-light">
+            Sustentamos nuestro acompañamiento estratégico en más de 15 años liderando transformación en banca, seguros, BPO y salud. Entendemos las prioridades operativas antes de proponer código.
+          </p>
         </div>
-        <div class="bg-brand-dark border border-slate-850 p-6 rounded-xl space-y-4">
-          <div class="h-10 w-10 bg-brand-orange/10 text-brand-orange rounded flex items-center justify-center font-bold">03</div>
-          <h3 class="text-base font-bold text-white">Soberanía Tecnológica</h3>
-          <p class="text-xs text-slate-400 leading-relaxed font-light">Instalamos capacidades de innovación reales en tu equipo para que decidas libremente quién operará el MVP final.</p>
+        <!-- Card 3 -->
+        <div class="kinetic-card p-8 rounded-xl space-y-4 shadow-xl">
+          <div class="h-10 w-10 bg-brand-orange/10 text-brand-orange rounded flex items-center justify-center font-mono font-bold text-sm">03</div>
+          <h3 class="text-lg font-bold text-white uppercase tracking-wider">Soberanía Tecnológica</h3>
+          <p class="text-xs text-slate-400 leading-relaxed font-light">
+            Instalamos capacidades de innovación reales dentro de tu organización. El roadmap de 90 días desglosa la ejecución técnica de forma autónoma, híbrida o de co-creación.
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SECCIÓN CONTACTO Y CTA -->
-  <section id="contacto" class="py-24 bg-brand-dark relative border-t border-slate-800">
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-brand-orange/5 rounded-full blur-[110px] pointer-events-none"></div>
+  <!-- CONTACTO CTA CONSULTIVO -->
+  <section id="contacto" class="py-28 bg-brand-dark relative border-t border-slate-800">
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-brand-orange/5 rounded-full blur-[120px] pointer-events-none"></div>
 
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
       <div class="inline-flex p-3 bg-brand-navy border border-slate-800 text-brand-orange rounded-full mb-6">
         <i data-lucide="message-square" class="w-8 h-8"></i>
       </div>
 
-      <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tight mb-4">¿Listo para acelerar tu estrategia?</h2>
-      <p class="text-sm md:text-base text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed font-light">
-        Agenda una llamada consultiva de 30 minutos. Compartimos los desafíos específicos de tu organización para validar juntos si el formato de alta intensidad de **MERGE Sprint®** es ideal.
+      <h2 class="text-4xl sm:text-5xl font-black text-white tracking-tight mb-4">¿Listo para acelerar tu estrategia?</h2>
+      <p class="text-sm md:text-base text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed font-light">
+        Agenda una llamada consultiva de 30 minutos. Compartimos los desafíos específicos de tu organización para validar si el formato intensivo de **MERGE Sprint®** es el adecuado.
       </p>
 
       <!-- Contact card -->
-      <div class="bg-[#020813] border border-slate-800 p-6 sm:p-10 rounded-2xl max-w-2xl mx-auto shadow-2xl text-left">
-        <h3 class="text-xs uppercase font-mono tracking-widest text-brand-orange mb-6 text-center">Contacto Estratégico Directo</h3>
+      <div class="kinetic-card p-6 sm:p-10 rounded-2xl max-w-2xl mx-auto shadow-2xl text-left">
+        <h3 class="text-xs uppercase font-mono tracking-widest text-brand-orange mb-6 text-center font-bold">Canal Consultivo Directo</h3>
         
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <!-- WhatsApp Link -->
@@ -598,9 +846,9 @@
             href="https://wa.me/573112235321?text=Hola%20Jhohanna,%20le%C3%AD%20el%20brochure%20de%20MERGE%20Sprint%20y%20quiero%20conocer%20si%20el%20formato%20es%20correcto%20para%20nuestra%20empresa"
             target="_blank" 
             rel="noreferrer"
-            class="bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold p-4 rounded text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 shadow-lg shadow-brand-orange/20 text-center"
+            class="bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold p-4 rounded text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg shadow-brand-orange/20 text-center active:scale-95"
           >
-            <i data-lucide="phone-call" class="w-4 h-4"></i>
+            <i data-lucide="phone-call" class="w-4 h-4 animate-bounce"></i>
             <span>Hablar por WhatsApp</span>
           </a>
 
@@ -610,7 +858,7 @@
               <i data-lucide="user" class="w-4 h-4"></i>
             </div>
             <div>
-              <span class="text-[9px] uppercase font-mono text-slate-500 block">Especialista de Estrategia</span>
+              <span class="text-[9px] uppercase font-mono text-slate-500 block font-bold">Especialista de Estrategia</span>
               <p class="text-xs font-bold text-white">Jhohanna Torres H.</p>
               <p class="text-[10px] text-brand-orange mt-0.5">+57 311 2235321</p>
             </div>
@@ -625,12 +873,13 @@
   </section>
 
   <!-- FOOTER -->
-  <footer class="bg-[#020813] py-16 border-t border-slate-900 text-center">
+  <footer class="bg-brand-navy py-20 border-t border-slate-900 text-center relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      
       <div class="flex flex-col sm:flex-row items-center justify-between gap-6 pb-8 border-b border-slate-900">
         <div class="flex items-center gap-3">
-          <!-- Footer Logo -->
-          <div class="h-8 w-8 bg-white rounded-full flex items-center justify-center p-1 border border-slate-200">
+          <!-- Footer Logo (logo.PNG - Sin modificar) -->
+          <div class="h-9 w-9 bg-white rounded-full flex items-center justify-center p-1 border border-slate-200">
             <img 
               src="logo.PNG" 
               alt="MINDMERGE Logo" 
@@ -642,7 +891,7 @@
         </div>
         <div class="flex items-center gap-4 text-xs font-mono text-slate-400 uppercase tracking-widest">
           <span>Strategy that ships.</span>
-          <span class="text-[#ff5500] font-bold">AI that scales.</span>
+          <span class="text-brand-orange font-bold glow-accent">AI that scales.</span>
         </div>
       </div>
 
@@ -653,9 +902,20 @@
     </div>
   </footer>
 
-  <!-- DYNAMIC LOGIC - JAVASCRIPT ENGINE -->
+  <!-- DYNAMIC JAVASCRIPT ENGINE -->
   <script>
-    // --- NOTIFICATION UTILITY ---
+    // --- BACKGROUND CAROUSEL SLIDESHOW ENGINE ---
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+    
+    function rotateSlideshow() {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (currentSlide + 1) % slides.length;
+      slides[currentSlide].classList.add('active');
+    }
+    setInterval(rotateSlideshow, 6000); // Rotates every 6 seconds
+
+    // --- NOTIFICATION ENGINE ---
     function triggerNotification(msg) {
       const banner = document.getElementById('notification');
       const text = document.getElementById('notification-text');
@@ -666,23 +926,22 @@
       }, 4000);
     }
 
-    // --- SMOOTH SCROLL FOR IPAD ---
+    // --- SMOOTH SCROLL ---
     function scrollToId(id) {
       const el = document.getElementById(id);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       }
-      // Close mobile menu if open
       document.getElementById('mobile-menu').classList.add('hidden');
     }
 
-    // --- MOBILE MENU TOGGLE ---
+    // --- MOBILE MENU ---
     function toggleMobileMenu() {
       const menu = document.getElementById('mobile-menu');
       menu.classList.toggle('hidden');
     }
 
-    // --- WHITEBOARD STEPS TOGGLE ---
+    // --- WHITEBOARD PATHS TOGGLE ---
     function setPlaybookStep(step) {
       const btn1 = document.getElementById('btn-playbook-1');
       const btn2 = document.getElementById('btn-playbook-2');
@@ -692,8 +951,8 @@
       const endpoint = document.getElementById('svg-endpoint');
 
       if (step === 1) {
-        btn1.className = "flex-1 text-[9px] uppercase tracking-wider py-2 rounded font-mono font-bold bg-brand-orange text-white";
-        btn2.className = "flex-1 text-[9px] uppercase tracking-wider py-2 rounded font-mono font-bold bg-[#020813] border border-slate-800 text-slate-400";
+        btn1.className = "flex-1 text-[9px] uppercase tracking-wider py-2.5 rounded font-mono font-bold bg-brand-orange text-white transition-all duration-300";
+        btn2.className = "flex-1 text-[9px] uppercase tracking-wider py-2.5 rounded font-mono font-bold bg-[#020813] border border-slate-800 text-slate-400 transition-all duration-300";
         title.textContent = "⚠️ Comités fragmentados sin conclusión";
         path1.classList.remove('hidden');
         path2.classList.add('hidden');
@@ -701,8 +960,8 @@
         endpoint.setAttribute('cy', '60');
         endpoint.setAttribute('fill', '#475569');
       } else {
-        btn1.className = "flex-1 text-[9px] uppercase tracking-wider py-2 rounded font-mono font-bold bg-[#020813] border border-slate-800 text-slate-400";
-        btn2.className = "flex-1 text-[9px] uppercase tracking-wider py-2 rounded font-mono font-bold bg-brand-orange text-white";
+        btn1.className = "flex-1 text-[9px] uppercase tracking-wider py-2.5 rounded font-mono font-bold bg-[#020813] border border-slate-800 text-slate-400 transition-all duration-300";
+        btn2.className = "flex-1 text-[9px] uppercase tracking-wider py-2.5 rounded font-mono font-bold bg-brand-orange text-white transition-all duration-300";
         title.textContent = "🚀 Ruta acelerada MERGE Sprint®";
         path1.classList.add('hidden');
         path2.classList.remove('hidden');
@@ -720,12 +979,10 @@
       const hasBCase = document.getElementById('input-bcase').checked;
       const hasProto = document.getElementById('input-proto').checked;
 
-      // Update Slider Labels
       document.getElementById('label-months').textContent = `${months} meses`;
       document.getElementById('label-areas').textContent = `${areas} áreas`;
       document.getElementById('label-people').textContent = `${people} directores`;
 
-      // Math
       const weeklyMeetingHours = 3; 
       const averageExecutiveHourlyRate = 50; 
       const monthlyCommitteeHours = weeklyMeetingHours * people * 4.3;
@@ -742,64 +999,135 @@
       const totalEstimate = Math.round((totalDirectWasted + totalOpportunityWasted) * multiplier);
       const totalWastedHours = Math.round(monthlyCommitteeHours * months);
 
-      // Render Outputs
       document.getElementById('calc-total').textContent = `$${totalEstimate.toLocaleString()} USD`;
       document.getElementById('calc-hours').textContent = `${totalWastedHours} hrs`;
       document.getElementById('calc-direct').textContent = `$${totalDirectWasted.toLocaleString()} USD`;
       document.getElementById('calc-opportunity').textContent = `$${totalOpportunityWasted.toLocaleString()} USD`;
 
-      // Risk diagnosis
       const riskEl = document.getElementById('calc-risk');
       if (months > 12 || (!hasProto && people > 8)) {
         riskEl.textContent = "Parálisis de Comités Directivos de IA";
-        riskEl.className = "text-xs font-extrabold text-rose-500";
+        riskEl.className = "text-xs font-extrabold text-rose-500 text-glow";
       } else if (months > 6 || !hasBCase) {
         riskEl.textContent = "Exploración Fragmentada Sin Dirección";
-        riskEl.className = "text-xs font-extrabold text-amber-500";
+        riskEl.className = "text-xs font-extrabold text-amber-500 text-glow";
       } else {
         riskEl.textContent = "Piloto Inicial Requiere Roadmap Claro";
-        riskEl.className = "text-xs font-extrabold text-brand-orange";
+        riskEl.className = "text-xs font-extrabold text-brand-orange text-glow";
       }
     }
 
-    // --- TERMINAL COPILOT ENGINE ---
-    let terminalSimulationTimeout = null;
-    function runTerminalSimulation() {
-      const screen = document.getElementById('terminal-screen');
-      screen.innerHTML = '<div class="text-indigo-400 font-bold">[SYSTEM] Iniciando motor Claude copiloto...</div>';
-      
-      const logs = [
-        '[DATA] Analizando core digital corporativo...',
-        '[STRATEGY] Dolor seleccionado: Embudo de conversión lento.',
-        '[MODEL] Orquestando prompts y lógica adaptativa para el journey...',
-        '[INTEGRATION] Conectando API de mensajería segura con backend...',
-        '[INTERFACE] Renderizando interfaz interactiva del usuario...',
-        '[SUCCESS] Prototipo funcional desplegado en producción simulada.'
-      ];
+    // --- ACCENTURE-LIKE PLAYBOOK DATABASE & KINETIC CONSOLE ENGINE ---
+    const stepDetails = {
+      1: {
+        title: "MAP · Mapeo del Core Digital",
+        phase: "Fase 1 de 5",
+        desc: "Diagnóstico express y mapeo en tiempo récord de los dolores y oportunidades reales del negocio para detectar dónde está el mayor potencial de reinvención comercial inmediata.",
+        deliverable: "Entregable: Mapeo de Dolores Core Digital",
+        logs: [
+          '[SYSTEM] Inicializando módulo de análisis táctico...',
+          '[DATA] Conectando con bases de datos operacionales pasivas...',
+          '[ANALYTICS] Mapeando cuellos de botella en embudo comercial...',
+          '[METRICS] Identificados 12 procesos críticos con latencia crítica.',
+          '[SUCCESS] Diagnóstico express del Core Digital completado con éxito.'
+        ]
+      },
+      2: {
+        title: "ENV · Priorización del Caso de Uso",
+        phase: "Fase 2 de 5",
+        desc: "Evaluación objetiva de factibilidad y retorno de inversión. Selección del caso de uso de Inteligencia Artificial prioritario de la organización.",
+        deliverable: "Entregable: Matriz de Priorización de Impacto",
+        logs: [
+          '[SYSTEM] Iniciando algoritmo de priorización de negocio...',
+          '[STRATEGY] Evaluando matriz de esfuerzo técnico vs retorno financiero...',
+          '[FILTER] Descartando iniciativas de bajo impacto de ingresos (Revenue-first)...',
+          '[DECISION] Caso #1 seleccionado: Optimización del Journey Comercial asistido.',
+          '[SUCCESS] Caso de uso prioritario aprobado por comité.'
+        ]
+      },
+      3: {
+        title: "REI · Prototipo Funcional en Vivo",
+        phase: "Fase 3 de 5",
+        desc: "Construcción en caliente y frente a los directores de un prototipo interactivo funcional del caso prioritario usando Claude como copiloto acelerador.",
+        deliverable: "Entregable: Prototipo Interactivo Funcional de IA",
+        logs: [
+          '[SYSTEM] Orquestando API segura de sandbox...',
+          '[ENGINE] Claude estructurando prompts y lógica adaptativa...',
+          '[UI] Generando interfaz responsive para iPad e iFrame...',
+          '[INTEGRATION] Inyectando reglas lógicas y flujos conversacionales...',
+          '[SUCCESS] Prototipo funcional desplegado en producción simulada.'
+        ]
+      },
+      4: {
+        title: "GEN · Plan de Escalamiento a 90 días",
+        phase: "Fase 4 de 5",
+        desc: "Diseño del plan táctico de arquitectura, recursos y seguridad de la información para llevar de forma de confianza el prototipo de IA a un MVP real en producción.",
+        deliverable: "Entregable: Roadmap de Implementación a 90d",
+        logs: [
+          '[PLANNING] Estructurando hitos de desarrollo incremental...',
+          '[SECURITY] Evaluando capas de encriptación de datos sensibles...',
+          '[INFRA] Trazando conectores de nube nativa elástica...',
+          '[METRICS] Configurando KPIs de retorno en producción...',
+          '[SUCCESS] Roadmap finalizado con dueños de proceso y metas.'
+        ]
+      },
+      5: {
+        title: "EVO · Compromisos y Sostenibilidad",
+        phase: "Fase 5 de 5",
+        desc: "Cierre de la jornada táctica asignando compromisos para asegurar la sostenibilidad, alineación organizativa y transferencia técnica necesaria.",
+        deliverable: "Entregable: Plan de Capacidad Instalada",
+        logs: [
+          '[PEOPLE] Alineando líderes funcionales de negocio...',
+          '[GOVERNANCE] Configurando directrices éticas corporativas de IA...',
+          '[SOPORTE] Programando sesiones consultivas de control post-sprint...',
+          '[SUCCESS] Lanzamiento del Merge Sprint® completado de forma sostenible.'
+        ]
+      }
+    };
 
-      // Clear previous timeouts
-      if (terminalSimulationTimeout) {
-        clearTimeout(terminalSimulationTimeout);
+    function setActivePlaybookStepIndex(stepIndex) {
+      // Toggle button active classes
+      for (let i = 1; i <= 5; i++) {
+        const btn = document.getElementById(`tab-step-${i}`);
+        if (!btn) continue;
+        if (i === stepIndex) {
+          btn.className = "tab-transition w-full text-left px-5 py-4 rounded border text-xs font-bold flex items-center justify-between uppercase tracking-widest bg-gradient-to-r from-slate-900 to-brand-card border-brand-orange text-white";
+          btn.querySelector('span span').className = "font-mono text-brand-orange font-bold text-sm";
+        } else {
+          btn.className = "tab-transition w-full text-left px-5 py-4 rounded border text-xs font-bold flex items-center justify-between uppercase tracking-widest bg-brand-navy hover:bg-slate-900 border-slate-800 text-slate-400 hover:text-white";
+          btn.querySelector('span span').className = "font-mono text-slate-500 font-bold";
+        }
       }
 
-      logs.forEach((log, index) => {
-        terminalSimulationTimeout = setTimeout(() => {
-          const line = document.createElement('div');
+      // Update Slides text
+      const data = stepDetails[stepIndex];
+      document.getElementById('slide-phase').textContent = data.phase;
+      document.getElementById('slide-title').textContent = data.title;
+      document.getElementById('slide-desc').textContent = data.desc;
+      document.getElementById('slide-deliverable').textContent = data.deliverable;
+
+      // Update simulated terminal
+      const consoleScreen = document.getElementById('terminal-step-screen');
+      consoleScreen.innerHTML = '';
+      data.logs.forEach((log, index) => {
+        setTimeout(() => {
+          const logLine = document.createElement('div');
           if (log.includes('[SUCCESS]')) {
-            line.className = 'text-emerald-400 font-bold';
+            logLine.className = 'text-emerald-400 font-bold animate-pulse';
           } else if (log.includes('[STRATEGY]')) {
-            line.className = 'text-brand-orange font-bold';
+            logLine.className = 'text-brand-orange font-bold';
+          } else if (log.includes('[SYSTEM]')) {
+            logLine.className = 'text-indigo-400';
           } else {
-            line.className = 'text-slate-300';
+            logLine.className = 'text-slate-300';
           }
-          line.textContent = log;
-          screen.appendChild(line);
-          screen.scrollTop = screen.scrollHeight; // Auto Scroll on iPad
-        }, (index + 1) * 900);
+          logLine.textContent = log;
+          consoleScreen.appendChild(logLine);
+        }, index * 250);
       });
     }
 
-    // --- SECTORS DATABASE ---
+    // --- SECTORS / INDUSTRIES DATABASE ---
     const industryCases = {
       banca: {
         title: 'Banca · Venta de Tarjeta de Crédito',
@@ -867,7 +1195,7 @@
         title: 'BPO · Refinanciación de Cartera en Mora',
         problem: 'Carteras en mora masivas sin cobertura oportuna y altos costes de atención humana para acuerdos sencillos.',
         solution: 'Agente conversacional autónomo entrenado para evaluar perfiles deudores, validar límites de elegibilidad y estructurar refinanciaciones amables automáticamente.',
-        metric: 'Aumento en cobertura de recaudo, menor coste por contacto y procesos de cobro altamente inclusivos.',
+        metric: 'Aumento en cobertura de recaudo, menor coste por contacto y procesos de cobro altamente de confianza.',
         badge: 'Cobranza Adaptativa',
         ref: 'Educación | Refinanciación de Cartera en Mora',
         svg: `
@@ -908,18 +1236,16 @@
       const data = industryCases[key];
       if (!data) return;
 
-      // Update active button state
       const buttonsContainer = document.getElementById('sector-buttons');
       Array.from(buttonsContainer.children).forEach(btn => {
         const btnKey = btn.getAttribute('data-key');
         if (btnKey === key) {
-          btn.className = "text-left px-4 py-3.5 rounded border text-xs font-bold transition-all duration-200 flex items-center justify-between bg-gradient-to-r from-slate-900 to-brand-card border-brand-orange/80 text-white";
+          btn.className = "text-left px-4 py-3.5 rounded border text-xs font-bold transition-all duration-300 flex items-center justify-between bg-gradient-to-r from-slate-900 to-brand-card border-brand-orange text-white";
         } else {
-          btn.className = "text-left px-4 py-3.5 rounded border text-xs font-bold transition-all duration-200 flex items-center justify-between bg-brand-navy hover:bg-slate-900/80 border-slate-800 text-slate-400 hover:text-white";
+          btn.className = "text-left px-4 py-3.5 rounded border text-xs font-bold transition-all duration-300 flex items-center justify-between bg-brand-navy hover:bg-slate-900/80 border-slate-800 text-slate-400 hover:text-white";
         }
       });
 
-      // Update panel content
       document.getElementById('case-title').textContent = data.title;
       document.getElementById('case-badge').textContent = data.badge;
       document.getElementById('case-problem').textContent = data.problem;
@@ -929,7 +1255,6 @@
       document.getElementById('case-svg-container').innerHTML = data.svg;
     }
 
-    // Initialize Industry Selector Buttons
     function initIndustryButtons() {
       const container = document.getElementById('sector-buttons');
       container.innerHTML = '';
@@ -939,8 +1264,8 @@
         btn.setAttribute('data-key', key);
         btn.onclick = () => selectSector(key);
         btn.className = idx === 0 
-          ? "text-left px-4 py-3.5 rounded border text-xs font-bold transition-all duration-200 flex items-center justify-between bg-gradient-to-r from-slate-900 to-brand-card border-brand-orange/80 text-white"
-          : "text-left px-4 py-3.5 rounded border text-xs font-bold transition-all duration-200 flex items-center justify-between bg-brand-navy hover:bg-slate-900/80 border-slate-800 text-slate-400 hover:text-white";
+          ? "text-left px-4 py-3.5 rounded border text-xs font-bold transition-all duration-300 flex items-center justify-between bg-gradient-to-r from-slate-900 to-brand-card border-brand-orange text-white"
+          : "text-left px-4 py-3.5 rounded border text-xs font-bold transition-all duration-300 flex items-center justify-between bg-brand-navy hover:bg-slate-900/80 border-slate-800 text-slate-400 hover:text-white";
         
         btn.innerHTML = `
           <span class="flex items-center gap-2">
@@ -951,7 +1276,6 @@
         `;
         container.appendChild(btn);
       });
-      // Activate Lucide icons inside newly generated buttons
       lucide.createIcons();
     }
 
@@ -959,9 +1283,9 @@
     window.onload = function() {
       initIndustryButtons();
       selectSector('banca');
+      setActivePlaybookStepIndex(1);
       recalculate();
-      runTerminalSimulation();
-      // Initialize icons globally
+      // Initialize icons
       lucide.createIcons();
     }
   </script>
