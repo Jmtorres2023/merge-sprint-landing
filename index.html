@@ -6,20 +6,20 @@
   <title>MINDMERGE · MERGE Sprint®</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Tailwind Configuration matching Accenture's high-contrast organic style -->
+  <!-- Tailwind Configuration matching Accenture's Premium High-Contrast Identity -->
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
             brand: {
-              navy: '#010309',
-              dark: '#030815',
+              navy: '#02050e',
+              dark: '#010309',
               orange: '#ff5500',
               orangeHover: '#e04b00',
-              purple: '#6d28d9',
-              glow: '#ff7700',
-              card: 'rgba(5, 12, 30, 0.65)'
+              purple: '#7c3aed',
+              card: 'rgba(5, 12, 30, 0.5)',
+              border: '#1e293b'
             }
           },
           fontFamily: {
@@ -34,76 +34,51 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap');
 
-    /* Custom kinetic animations to break the "square box" feel */
     ::-webkit-scrollbar {
       width: 6px;
     }
     ::-webkit-scrollbar-track {
-      background: #010309;
+      background: #02050e;
     }
     ::-webkit-scrollbar-thumb {
       background: #ff5500;
       border-radius: 4px;
     }
 
-    /* Rotating background slides with Ken Burns zoom effect */
-    .hero-slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      transition: opacity 1.5s ease-in-out;
-      transform: scale(1.05);
-    }
-    .hero-slide.active {
-      opacity: 0.35;
-      animation: kenBurns 12s ease-out forwards;
-    }
-
-    @keyframes kenBurns {
-      to {
-        transform: scale(1.15);
-      }
+    /* Clean static tech grid background */
+    .static-grid {
+      background-size: 50px 50px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 85, 0, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 85, 0, 0.03) 1px, transparent 1px);
     }
 
     /* Diagonal clipped background separators */
     .clip-diagonal-1 {
-      clip-path: polygon(0 0, 100% 4%, 100% 100%, 0 96%);
+      clip-path: polygon(0 0, 100% 3%, 100% 100%, 0 97%);
     }
     .clip-diagonal-2 {
-      clip-path: polygon(0 4%, 100% 0, 100% 96%, 0 100%);
+      clip-path: polygon(0 3%, 100% 0, 100% 97%, 0 100%);
     }
 
-    /* Floating kinetic bubbles */
-    .floating-glow {
-      animation: floatGlow 18s ease-in-out infinite alternate;
-    }
-    @keyframes floatGlow {
-      0% {
-        transform: translate(0, 0) scale(1) rotate(0deg);
-        filter: blur(100px);
-      }
-      50% {
-        transform: translate(60px, -40px) scale(1.2) rotate(180deg);
-        filter: blur(140px);
-      }
-      100% {
-        transform: translate(-30px, 80px) scale(0.9) rotate(360deg);
-        filter: blur(100px);
-      }
+    /* Floating static glow blobs */
+    .glow-bg {
+      filter: blur(120px);
+      opacity: 0.15;
     }
 
-    /* Interactive neon outline cards */
+    /* Interactive borders */
     .kinetic-card {
       position: relative;
       background: rgba(5, 12, 30, 0.4);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 85, 0, 0.08);
-      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .kinetic-card:hover {
-      transform: translateY(-8px) scale(1.01);
-      border-color: rgba(255, 85, 0, 0.5);
+      transform: translateY(-6px);
+      border-color: rgba(255, 85, 0, 0.4);
       box-shadow: 0 20px 40px -15px rgba(255, 85, 0, 0.15);
     }
 
@@ -124,25 +99,25 @@
     }
   </style>
 </head>
-<body class="bg-brand-navy text-slate-100 font-sans selection:bg-brand-orange selection:text-white overflow-x-hidden min-h-screen relative">
+<body class="bg-brand-navy text-slate-200 font-sans selection:bg-brand-orange selection:text-white overflow-x-hidden min-h-screen relative">
 
-  <!-- BACKGROUND KINETIC FLOATING BLCOBS -->
-  <div class="absolute top-[20%] left-[-10%] w-[450px] h-[450px] bg-brand-orange/5 rounded-full floating-glow pointer-events-none z-0"></div>
-  <div class="absolute top-[60%] right-[-10%] w-[550px] h-[550px] bg-brand-purple/5 rounded-full floating-glow pointer-events-none z-0" style="animation-delay: -5s;"></div>
+  <!-- BACKGROUND GLOW EFFECTS -->
+  <div class="absolute top-[15%] left-[-10%] w-[500px] h-[500px] bg-brand-orange rounded-full glow-accent opacity-10 filter blur-[130px] pointer-events-none z-0"></div>
+  <div class="absolute top-[45%] right-[-10%] w-[500px] h-[500px] bg-brand-purple rounded-full opacity-10 filter blur-[130px] pointer-events-none z-0"></div>
 
   <!-- NOTIFICACIÓN FLOTANTE -->
   <div id="notification" class="fixed bottom-6 right-6 z-50 bg-brand-dark/95 backdrop-blur border-l-4 border-brand-orange text-slate-200 px-5 py-4 rounded shadow-2xl flex items-center gap-3 hidden transition-all duration-300 max-w-sm">
-    <i data-lucide="flame" class="text-brand-orange w-5 h-5 flex-shrink-0 animate-bounce"></i>
+    <i data-lucide="flame" class="text-brand-orange w-5 h-5 flex-shrink-0"></i>
     <p id="notification-text" class="text-xs font-semibold"></p>
   </div>
 
   <!-- HEADER -->
-  <header class="sticky top-0 z-40 bg-brand-navy/90 backdrop-blur-md border-b border-slate-900/80">
+  <header class="sticky top-0 z-40 bg-brand-navy/95 backdrop-blur-md border-b border-slate-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
-      <!-- Brand Logo con imagen de repositorio (logo.PNG - Sin Modificar) -->
-      <div class="flex items-center gap-3 cursor-pointer group" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
-        <div class="h-11 w-11 bg-white rounded-full flex items-center justify-center p-1 border border-slate-800 shadow-xl overflow-hidden transition-transform duration-500 group-hover:rotate-[360deg]">
+      <!-- Brand Logo con imagen personalizada (logo.PNG - Ajustado para coincidir con tu archivo subido) -->
+      <div class="flex items-center gap-3 cursor-pointer" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+        <div class="h-11 w-11 bg-white rounded-full flex items-center justify-center p-1 border border-slate-800 shadow-xl overflow-hidden transition-transform duration-500">
           <img 
             src="logo.PNG" 
             alt="MINDMERGE Logo" 
@@ -151,7 +126,7 @@
           />
         </div>
         <div>
-          <span class="text-lg font-black tracking-wider text-white transition-colors group-hover:text-brand-orange">MINDMERGE</span>
+          <span class="text-lg font-black tracking-wider text-white">MINDMERGE</span>
           <p class="text-[9px] text-brand-orange font-mono tracking-widest uppercase">Estrategia & IA aplicada</p>
         </div>
       </div>
@@ -188,7 +163,7 @@
       </div>
 
       <!-- Mobile Button -->
-      <button class="md:hidden text-slate-300 hover:text-white p-2 animate-pulse" onclick="toggleMobileMenu()">
+      <button class="md:hidden text-slate-300 hover:text-white p-2" onclick="toggleMobileMenu()">
         <i data-lucide="menu" id="menu-icon" class="w-6 h-6"></i>
       </button>
     </div>
@@ -209,22 +184,12 @@
     </div>
   </header>
 
-  <!-- DYNAMIC BACKGROUND SLIDESHOW HERO -->
-  <section class="relative pt-24 pb-36 md:pt-36 md:pb-48 overflow-hidden min-h-[90vh] flex items-center justify-center">
-    
-    <!-- Rotating Images (Ken Burns Slideshow) -->
-    <div class="absolute inset-0 z-0 overflow-hidden bg-brand-navy">
-      <div class="hero-slide active" style="background: linear-gradient(to bottom, rgba(1, 3, 9, 0.95), rgba(1, 3, 9, 0.8)), url('https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1600&auto=format&fit=crop') center/cover no-repeat;"></div>
-      <div class="hero-slide" style="background: linear-gradient(to bottom, rgba(1, 3, 9, 0.95), rgba(1, 3, 9, 0.8)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=1600&auto=format&fit=crop') center/cover no-repeat;"></div>
-      <div class="hero-slide" style="background: linear-gradient(to bottom, rgba(1, 3, 9, 0.95), rgba(1, 3, 9, 0.8)), url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1600&auto=format&fit=crop') center/cover no-repeat;"></div>
-      <div class="hero-slide" style="background: linear-gradient(to bottom, rgba(1, 3, 9, 0.95), rgba(1, 3, 9, 0.8)), url('https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1600&auto=format&fit=crop') center/cover no-repeat;"></div>
-    </div>
-
-    <!-- Hero Content -->
+  <!-- SOLID & HI-TECH GRID HERO SECTION -->
+  <section class="relative pt-24 pb-32 md:pt-36 md:pb-48 overflow-hidden bg-brand-navy static-grid z-10 border-b border-slate-900/60">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-10">
       
       <div class="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-brand-card/90 border border-brand-orange/20 text-xs text-brand-orange font-mono tracking-widest uppercase shadow-xl backdrop-blur">
-        <i data-lucide="sparkles" class="w-4 h-4 animate-spin" style="animation-duration: 4s;"></i>
+        <i data-lucide="sparkles" class="w-4 h-4 animate-pulse"></i>
         <span>Revenue-first · AI-native strategic consulting</span>
       </div>
 
@@ -242,7 +207,7 @@
       </div>
 
       <div class="max-w-3xl mx-auto space-y-6">
-        <p class="text-xl md:text-2xl text-slate-200 font-light leading-relaxed italic border-l-4 border-brand-orange pl-6 py-2 text-left bg-brand-navy/60 rounded-r-xl backdrop-blur-sm">
+        <p class="text-xl md:text-2xl text-slate-200 font-light leading-relaxed italic border-l-4 border-brand-orange pl-6 py-2 text-left bg-[#050c1e]/40 rounded-r-xl backdrop-blur-sm">
           "Con IA, las fronteras entre la estrategia de negocio y la estrategia tecnológica <strong class="text-brand-orange font-bold glow-accent">deben desaparecer</strong>."
         </p>
         <p class="text-sm md:text-base text-slate-400 font-light leading-relaxed text-left">
@@ -253,14 +218,14 @@
       <div class="flex flex-col sm:flex-row items-center justify-center gap-5 pt-6">
         <button 
           onclick="scrollToId('contacto')"
-          class="w-full sm:w-auto bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold px-8 py-4 rounded text-xs tracking-widest uppercase shadow-2xl shadow-brand-orange/30 flex items-center justify-center gap-3 transition-all hover:translate-y-[-2px]"
+          class="w-full sm:w-auto bg-brand-orange hover:bg-brand-orangeHover text-white font-extrabold px-8 py-4 rounded text-xs tracking-widest uppercase shadow-2xl shadow-brand-orange/30 flex items-center justify-center gap-3 transition-all hover:translate-y-[-2px] active:scale-95"
         >
           <span>Agenda Reunión Directiva</span>
           <i data-lucide="chevron-right" class="w-4 h-4"></i>
         </button>
         <button 
           onclick="scrollToId('comparador')"
-          class="w-full sm:w-auto bg-brand-card hover:bg-slate-900/80 text-slate-200 border border-slate-800 hover:border-slate-700 font-bold px-8 py-4 rounded text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2"
+          class="w-full sm:w-auto bg-[#050c1e]/80 hover:bg-slate-900/80 text-slate-200 border border-slate-800 hover:border-slate-700 font-bold px-8 py-4 rounded text-xs tracking-widest uppercase transition-all flex items-center justify-center gap-2"
         >
           <i data-lucide="activity" class="w-4 h-4 text-brand-orange"></i>
           <span>Ver Estrategia Espejo</span>
@@ -270,8 +235,8 @@
     </div>
   </section>
 
-  <!-- SECTION: THE APPEARING TABLE (TABLA DE IMPACTO ESPEJO - ESTILO ACCENTURE) -->
-  <section id="comparador" class="py-24 bg-brand-dark clip-diagonal-1 relative z-10 border-y border-slate-900/60">
+  <!-- COMPARADOR ESPEJO (TABLA DE IMPACTO EN MOVIMIENTO) -->
+  <section id="comparador" class="py-24 bg-brand-dark clip-diagonal-1 relative z-10 border-b border-slate-900/60">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
       
       <div class="text-center max-w-3xl mx-auto mb-20">
@@ -283,17 +248,17 @@
       </div>
 
       <!-- TABLE CONTAINER (GLASSMORPHISM WITH ANIMATED COLUMNS) -->
-      <div class="bg-brand-navy/80 border border-slate-850 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-md">
+      <div class="bg-brand-navy/90 border border-slate-850 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-md">
         
         <!-- Table Header (Hidden on small mobile) -->
         <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 font-mono text-xs uppercase tracking-wider text-slate-500 font-bold">
           <div class="md:col-span-4">Criterio Corporativo</div>
           <div class="md:col-span-4 text-rose-500">Comités Tradicionales de IA</div>
-          <div class="md:col-span-4 text-emerald-400">MERGE Sprint® (MINDMERGE)</div>
+          <div class="md:col-span-4 text-brand-orange">MERGE Sprint® (MINDMERGE)</div>
         </div>
 
         <!-- Table Row 1 -->
-        <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-brand-card/25">
+        <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-[#050c1e]/20">
           <div class="md:col-span-4 space-y-1">
             <h4 class="text-sm font-bold text-white uppercase tracking-wider">01 · Tiempo de Validación</h4>
             <p class="text-[11px] text-slate-500">Velocidad desde la idea hasta el prototipo tangible.</p>
@@ -307,7 +272,7 @@
               <span class="text-rose-500 font-mono">10%</span>
             </div>
             <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
-              <div class="bg-rose-500 h-full w-[10%] animate-pulse"></div>
+              <div class="bg-rose-500 h-full w-[10%]"></div>
             </div>
           </div>
 
@@ -316,7 +281,7 @@
             <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block md:hidden">MERGE Sprint</span>
             <div class="flex items-center justify-between text-xs text-white mb-1">
               <span class="font-bold">Dos jornadas (12 horas)</span>
-              <span class="text-emerald-400 font-mono font-bold">100%</span>
+              <span class="text-brand-orange font-mono font-bold text-glow">100%</span>
             </div>
             <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
               <div class="bg-brand-orange h-full w-full"></div>
@@ -325,7 +290,7 @@
         </div>
 
         <!-- Table Row 2 -->
-        <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-brand-card/25">
+        <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-[#050c1e]/20">
           <div class="md:col-span-4 space-y-1">
             <h4 class="text-sm font-bold text-white uppercase tracking-wider">02 · Claridad del Caso</h4>
             <p class="text-[11px] text-slate-500">Criterio objetivo de impacto y viabilidad.</p>
@@ -335,7 +300,7 @@
           <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
             <span class="text-[10px] font-mono text-rose-500 uppercase tracking-widest block md:hidden">Comités Tradicionales</span>
             <div class="flex items-center justify-between text-xs text-slate-350 mb-1">
-              <span>Foco en modas / Ideas difusas</span>
+              <span>Foco en modas o ideas difusas</span>
               <span class="text-rose-500 font-mono">25%</span>
             </div>
             <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
@@ -348,7 +313,7 @@
             <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block md:hidden">MERGE Sprint</span>
             <div class="flex items-center justify-between text-xs text-white mb-1">
               <span class="font-bold">Caso #1 priorizado con ROI</span>
-              <span class="text-emerald-400 font-mono font-bold">95%</span>
+              <span class="text-[#7c3aed] font-mono font-bold">95%</span>
             </div>
             <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
               <div class="bg-[#7c3aed] h-full w-[95%]"></div>
@@ -357,7 +322,7 @@
         </div>
 
         <!-- Table Row 3 -->
-        <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-brand-card/25">
+        <div class="grid grid-cols-1 md:grid-cols-12 border-b border-slate-800 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-[#050c1e]/20">
           <div class="md:col-span-4 space-y-1">
             <h4 class="text-sm font-bold text-white uppercase tracking-wider">03 · Evidencia Técnica</h4>
             <p class="text-[11px] text-slate-500">Demostración funcional con tus propios datos.</p>
@@ -367,7 +332,7 @@
           <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
             <span class="text-[10px] font-mono text-rose-500 uppercase tracking-widest block md:hidden">Comités Tradicionales</span>
             <div class="flex items-center justify-between text-xs text-slate-350 mb-1">
-              <span>Promesas teóricas de vendors</span>
+              <span>Promesas teóricas sin testear</span>
               <span class="text-rose-500 font-mono">15%</span>
             </div>
             <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
@@ -380,7 +345,7 @@
             <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block md:hidden">MERGE Sprint</span>
             <div class="flex items-center justify-between text-xs text-white mb-1">
               <span class="font-bold">Prototipo funcional en vivo</span>
-              <span class="text-emerald-400 font-mono font-bold">100%</span>
+              <span class="text-brand-orange font-mono font-bold text-glow">100%</span>
             </div>
             <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
               <div class="bg-brand-orange h-full w-full"></div>
@@ -389,7 +354,7 @@
         </div>
 
         <!-- Table Row 4 -->
-        <div class="grid grid-cols-1 md:grid-cols-12 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-brand-card/25">
+        <div class="grid grid-cols-1 md:grid-cols-12 p-6 md:p-8 items-center gap-4 transition-colors hover:bg-[#050c1e]/20">
           <div class="md:col-span-4 space-y-1">
             <h4 class="text-sm font-bold text-white uppercase tracking-wider">04 · Entregable Final</h4>
             <p class="text-[11px] text-slate-500">Ruta de acción clara para el equipo operativo.</p>
@@ -399,11 +364,11 @@
           <div class="md:col-span-4 md:border-l border-slate-800/50 md:pl-6 space-y-2">
             <span class="text-[10px] font-mono text-rose-500 uppercase tracking-widest block md:hidden">Comités Tradicionales</span>
             <div class="flex items-center justify-between text-xs text-slate-350 mb-1">
-              <span>Pilotos fragmentados, sin dueños</span>
+              <span>Pilotos fragmentados y sin dueños</span>
               <span class="text-rose-500 font-mono">5%</span>
             </div>
             <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
-              <div class="bg-rose-500 h-full w-[5%] animate-pulse"></div>
+              <div class="bg-rose-500 h-full w-[5%]"></div>
             </div>
           </div>
 
@@ -412,7 +377,7 @@
             <span class="text-[10px] font-mono text-emerald-400 uppercase tracking-widest block md:hidden">MERGE Sprint</span>
             <div class="flex items-center justify-between text-xs text-white mb-1">
               <span class="font-bold">Roadmap a 90 días ejecutable</span>
-              <span class="text-emerald-400 font-mono font-bold">100%</span>
+              <span class="text-[#7c3aed] font-mono font-bold">100%</span>
             </div>
             <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden">
               <div class="bg-[#7c3aed] h-full w-full"></div>
@@ -453,7 +418,7 @@
               <!-- Slider Months -->
               <div>
                 <div class="flex justify-between mb-2 text-xs">
-                  <label class="font-bold text-slate-300">¿Meses explorando IA sin decisiones claras de junta?</label>
+                  <label class="font-bold text-slate-300">¿Meses explorando IA sin decisiones de junta?</label>
                   <span id="label-months" class="text-brand-orange font-mono font-bold text-glow">6 meses</span>
                 </div>
                 <input 
@@ -518,12 +483,13 @@
         </div>
 
         <!-- Right Output Calculations -->
-        <div class="lg:col-span-5 bg-gradient-to-b from-brand-card to-brand-navy border border-slate-850 p-6 md:p-8 rounded-2xl flex flex-col justify-between shadow-2xl">
+        <div class="lg:col-span-5 kinetic-card bg-gradient-to-b from-brand-card to-brand-navy border border-slate-850 p-6 md:p-8 rounded-2xl flex flex-col justify-between shadow-2xl">
           <div>
             <span class="text-[9px] font-mono tracking-widest text-brand-orange uppercase block mb-1">Impacto de Inactividad</span>
             <h3 class="text-lg font-bold text-white mb-6">Pérdida Financiera Acumulada</h3>
             
             <div class="space-y-6">
+              <!-- Giant Counter Card -->
               <div class="bg-brand-navy/90 border border-slate-800 rounded p-6 text-center relative overflow-hidden">
                 <span class="text-[10px] uppercase font-mono tracking-wider text-slate-500 block mb-1">Costo Financiero Estimado</span>
                 <span id="calc-total" class="text-4xl sm:text-5xl font-black text-brand-orange font-mono block text-glow tracking-tighter">
@@ -593,7 +559,7 @@
       
       <div class="text-center max-w-3xl mx-auto mb-20">
         <span class="text-xs font-mono text-brand-orange uppercase tracking-widest block mb-2">Metodología Propietaria</span>
-        <h2 class="text-4xl font-black mb-4 text-white tracking-tight font-extrabold">
+        <h2 class="text-4xl font-black mb-4 text-white tracking-tight">
           Cinco Pasos. Resultados de Negocio.
         </h2>
         <p class="text-slate-400 text-sm font-light leading-relaxed">
@@ -686,7 +652,7 @@
               </div>
 
               <!-- Live dynamic sandbox simulation code terminal -->
-              <div class="bg-brand-navy border border-slate-900 rounded-xl p-4 font-mono text-xs h-40 overflow-y-auto relative scrollbar-thin mt-4">
+              <div class="bg-[#02050e] border border-slate-900 rounded-xl p-4 font-mono text-xs h-40 overflow-y-auto relative scrollbar-thin mt-4">
                 <div class="absolute top-2 right-2 flex gap-1">
                   <span class="h-2 w-2 rounded-full bg-rose-500"></span>
                   <span class="h-2 w-2 rounded-full bg-amber-500"></span>
@@ -701,7 +667,7 @@
 
           <div class="mt-8 pt-4 border-t border-slate-800 flex justify-between items-center text-[10px] font-mono text-slate-500 uppercase tracking-widest">
             <span id="slide-deliverable">Entregable: Diagnóstico Core Digital</span>
-            <span class="text-brand-orange font-bold font-black">MINDMERGE</span>
+            <span class="text-brand-orange font-black">MINDMERGE</span>
           </div>
 
         </div>
@@ -711,7 +677,7 @@
     </div>
   </section>
 
-  <!-- CASOS DE USO POR SECTOR (ESTILO DINÁMICO ACCENTURE) -->
+  <!-- CASOS DE USO POR SECTOR -->
   <section id="casos" class="py-24 bg-brand-dark border-t border-slate-900/60 relative overflow-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       
@@ -731,7 +697,7 @@
           <!-- Dynamically generated buttons with Lucide icons will run here -->
         </div>
 
-        <!-- Case Display card with Accenture Glowing style -->
+        <!-- Case Display card -->
         <div class="lg:col-span-8 bg-brand-navy border border-slate-800 p-6 md:p-10 rounded-2xl shadow-xl relative overflow-hidden">
           <div class="absolute top-0 right-0 w-64 h-64 bg-brand-orange/5 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -784,7 +750,7 @@
     </div>
   </section>
 
-  <!-- POR QUÉ FUNCIONA (SABEMOS DE NEGOCIO ANTES DE IA) -->
+  <!-- POR QUÉ FUNCIONA -->
   <section id="porque-funciona" class="py-24 bg-brand-navy border-t border-slate-900 text-left relative">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       
@@ -833,7 +799,8 @@
 
       <h2 class="text-4xl sm:text-5xl font-black text-white tracking-tight mb-4">¿Listo para acelerar tu estrategia?</h2>
       <p class="text-sm md:text-base text-slate-300 mb-10 max-w-2xl mx-auto leading-relaxed font-light">
-        Agenda una llamada consultiva de 30 minutos. Compartimos los desafíos específicos de tu organización para validar si el formato intensivo de **MERGE Sprint®** es el adecuado.
+        Agenda una llamada consultiva de 30 minutos. Hablamos del reto real de tu organización y decidimos juntos si MERGE Sprint® es el
+formato correcto para este momento.
       </p>
 
       <!-- Contact card -->
@@ -904,18 +871,7 @@
 
   <!-- DYNAMIC JAVASCRIPT ENGINE -->
   <script>
-    // --- BACKGROUND CAROUSEL SLIDESHOW ENGINE ---
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.hero-slide');
-    
-    function rotateSlideshow() {
-      slides[currentSlide].classList.remove('active');
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add('active');
-    }
-    setInterval(rotateSlideshow, 6000); // Rotates every 6 seconds
-
-    // --- NOTIFICATION ENGINE ---
+    // --- NOTIFICATION UTILITY ---
     function triggerNotification(msg) {
       const banner = document.getElementById('notification');
       const text = document.getElementById('notification-text');
@@ -1033,12 +989,12 @@
         ]
       },
       2: {
-        title: "ENV · Priorización del Caso de Uso",
+        title: "ENVISION · Priorización del Caso de Uso",
         phase: "Fase 2 de 5",
         desc: "Evaluación objetiva de factibilidad y retorno de inversión. Selección del caso de uso de Inteligencia Artificial prioritario de la organización.",
         deliverable: "Entregable: Matriz de Priorización de Impacto",
         logs: [
-          '[SYSTEM] Iniciando algoritmo de priorización de negocio...',
+          '[SYSTEM] Enlazando algoritmo de priorización de negocio...',
           '[STRATEGY] Evaluando matriz de esfuerzo técnico vs retorno financiero...',
           '[FILTER] Descartando iniciativas de bajo impacto de ingresos (Revenue-first)...',
           '[DECISION] Caso #1 seleccionado: Optimización del Journey Comercial asistido.',
@@ -1046,7 +1002,7 @@
         ]
       },
       3: {
-        title: "REI · Prototipo Funcional en Vivo",
+        title: "REINVENT · Prototipo Funcional en Vivo",
         phase: "Fase 3 de 5",
         desc: "Construcción en caliente y frente a los directores de un prototipo interactivo funcional del caso prioritario usando Claude como copiloto acelerador.",
         deliverable: "Entregable: Prototipo Interactivo Funcional de IA",
@@ -1059,7 +1015,7 @@
         ]
       },
       4: {
-        title: "GEN · Plan de Escalamiento a 90 días",
+        title: "GENERATE · Plan de Escalamiento a 90 días",
         phase: "Fase 4 de 5",
         desc: "Diseño del plan táctico de arquitectura, recursos y seguridad de la información para llevar de forma de confianza el prototipo de IA a un MVP real en producción.",
         deliverable: "Entregable: Roadmap de Implementación a 90d",
@@ -1072,7 +1028,7 @@
         ]
       },
       5: {
-        title: "EVO · Compromisos y Sostenibilidad",
+        title: "EVOLVE · Compromisos y Sostenibilidad",
         phase: "Fase 5 de 5",
         desc: "Cierre de la jornada táctica asignando compromisos para asegurar la sostenibilidad, alineación organizativa y transferencia técnica necesaria.",
         deliverable: "Entregable: Plan de Capacidad Instalada",
@@ -1195,7 +1151,7 @@
         title: 'BPO · Refinanciación de Cartera en Mora',
         problem: 'Carteras en mora masivas sin cobertura oportuna y altos costes de atención humana para acuerdos sencillos.',
         solution: 'Agente conversacional autónomo entrenado para evaluar perfiles deudores, validar límites de elegibilidad y estructurar refinanciaciones amables automáticamente.',
-        metric: 'Aumento en cobertura de recaudo, menor coste por contacto y procesos de cobro altamente de confianza.',
+        metric: 'Aumento en cobertura de recaudo, menor coste por contacto y procesos de cobro altamente inclusivos.',
         badge: 'Cobranza Adaptativa',
         ref: 'Educación | Refinanciación de Cartera en Mora',
         svg: `
